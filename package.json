@@ -1,0 +1,58 @@
+{
+  "name": "numcodecs",
+  "author": "Trevor James Manz",
+  "version": "0.0.0",
+  "description": "Javascript library providing buffer compression and transformation codecs for use in data storage and communication applications.",
+  "main": "dist/numcodecs.cj.js",
+  "module": "dist/numcodecs.esm.js",
+  "browser": "dist/numcodecs.umd.js",
+  "repository": {
+    "type": "git",
+    "url": "github.com/manzt/numcodecs"
+  },
+  "scripts": {
+    "build": "tsc && rollup -c",
+    "prebuild": "rm -rf dist",
+    "test": "mocha --r ts-node/register test/**/*.ts",
+    "test:prod": "npm run lint && npm run format:check && npm run test",
+    "lint": "tsc --noEmit && eslint ./src/**/*.ts --quiet --fix",
+    "format": "./node_modules/.bin/prettier --write src/**/*.ts",
+    "format:check": "./node_modules/.bin/prettier --check src/**/*.ts"
+  },
+  "keywords": [
+    "zarr",
+    "compression",
+    "codecs",
+    "storage"
+  ],
+  "files": [
+    "dist"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "@rollup/plugin-commonjs": "^11.0.2",
+    "@rollup/plugin-node-resolve": "^7.1.1",
+    "@rollup/plugin-typescript": "^3.0.0",
+    "@types/chai": "^4.2.10",
+    "@types/mocha": "^7.0.1",
+    "@types/pako": "^1.0.1",
+    "@typescript-eslint/eslint-plugin": "^2.22.0",
+    "@typescript-eslint/parser": "^2.22.0",
+    "chai": "^4.2.0",
+    "eslint": "^6.8.0",
+    "mocha": "^7.1.0",
+    "prettier": "1.19.1",
+    "rollup": "^1.32.0",
+    "ts-node": "^8.6.2",
+    "tslib": "^1.11.1",
+    "typescript": "^3.8.0"
+  },
+  "prettier": {
+    "trailingComma": "all",
+    "tabWidth": 2,
+    "singleQuote": true
+  },
+  "dependencies": {
+    "pako": "^1.0.11"
+  }
+}
