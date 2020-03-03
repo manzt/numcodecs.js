@@ -7,5 +7,5 @@ module.exports = {
     'plugin:@typescript-eslint/eslint-recommended',
     'plugin:@typescript-eslint/recommended',
   ],
-  ignorePatterns: ['rollup.config.js'],
+  ignorePatterns: ['rollup.config.js', 'tests'],
 };

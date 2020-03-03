@@ -11,14 +11,12 @@
     "noUnusedLocals": true,
     "noFallthroughCasesInSwitch": true,
     "typeRoots": ["./node_modules/@types"],
-    "lib": ["dom", "es2020"],
-    "noEmit": true,
+    "lib": ["dom", "esnext"],
     "noEmitOnError": false,
     "baseUrl": ".",
-    // "declaration": true,
-    // "declarationDir": "dist/types",
+    "declaration": true,
     "esModuleInterop": true
   },
-  "include": ["src/**/*", "tests"],
+  "include": ["src/**/*"],
   "exclude": ["dist", "node_modules", "tests"]
 }

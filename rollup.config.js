@@ -7,7 +7,7 @@ const pkg = require('./package.json');
 export default {
   input: 'src/numcodecs.ts',
   output: [
-    { file: pkg.browser, format: 'umd', name: 'zarrImage' },
+    { file: pkg.browser, format: 'umd', name: 'numcodecs' },
     { file: pkg.module, format: 'es' },
   ],
   external: [],

@@ -2,8 +2,7 @@
   "name": "numcodecs",
   "author": "Trevor James Manz",
   "version": "0.0.0",
-  "description": "Javascript library providing buffer compression and transformation codecs for use in data storage and communication applications.",
-  "main": "dist/numcodecs.cj.js",
+  "description": "Buffer compression and transformation codecs for use in data storage and communication applications.",
   "module": "dist/numcodecs.esm.js",
   "browser": "dist/numcodecs.umd.js",
   "repository": {
@@ -11,11 +10,12 @@
     "url": "github.com/manzt/numcodecs"
   },
   "scripts": {
-    "build": "tsc && rollup -c",
-    "prebuild": "rm -rf dist",
-    "test": "mocha --r ts-node/register test/**/*.ts",
-    "test:prod": "npm run lint && npm run format:check && npm run test",
+    "start": "rollup -c -w",
+    "test": "mocha --r ts-node/register ./tests/**/*.ts",
     "lint": "tsc --noEmit && eslint ./src/**/*.ts --quiet --fix",
+    "prebuild": "rm -rf dist",
+    "build": "tsc --emitDeclarationOnly --declarationDir ./dist/types && rollup -c",
+    "test:prod": "npm run lint && npm run format:check && npm run test",
     "format": "./node_modules/.bin/prettier --write src/**/*.ts",
     "format:check": "./node_modules/.bin/prettier --check src/**/*.ts"
   },
