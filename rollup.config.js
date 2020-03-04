@@ -14,5 +14,5 @@ export default {
   watch: {
     include: 'src/**',
   },
-  plugins: [typescript({ module: 'esnext' }), commonjs(), resolve()],
+  plugins: [typescript(), commonjs(), resolve()],
 };
