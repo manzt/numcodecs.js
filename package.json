@@ -18,7 +18,8 @@
     "start": "rollup -c -w",
     "test": "jest --coverage",
     "test:watch": "jest --coverage --watch",
-    "test:prod": "npm run lint && npm run format:check && npm run test -- --no-cache"
+    "test:prod": "npm run lint && npm run format:check && npm run test -- --no-cache",
+    "create-type-checkers": "./node_modules/ts-interface-builder/bin/ts-interface-builder ./src/types.ts"
   },
   "keywords": [
     "zarr",
@@ -54,10 +55,11 @@
   "jest": {
     "preset": "ts-jest",
     "collectCoverageFrom": [
-      "src/**/*.ts"
+      "src/**/{!(types|errors|numcodecs),}.ts"
     ]
   },
   "dependencies": {
-    "pako": "^1.0.11"
+    "pako": "^1.0.11",
+    "ts-interface-checker": "^0.1.10"
   }
 }
