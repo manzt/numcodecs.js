@@ -5,7 +5,7 @@ import pako from 'pako';
 export type ValidZlibLevelSetting = 0 | 9 | 1 | -1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
 
 export class Zlib implements Codec {
-  public static codecId = 'zlib';
+  public codecId = 'zlib';
   public level: ValidZlibLevelSetting;
 
   constructor(level = 1) {

@@ -2,10 +2,10 @@ import { Codec } from './types';
 import { ValueError } from './errors';
 import pako from 'pako';
 
-export type ValidGZipLevelSetting = 0 | 9 | 1 | -1 | 2 | 3 | 4 | 5 | 6 | 7 | 8;
+export type ValidGZipLevelSetting = -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
 export class GZip implements Codec {
-  public static codecId = 'gzip';
+  public codecId = 'gzip';
   public level: ValidGZipLevelSetting;
 
   constructor(level: number) {
