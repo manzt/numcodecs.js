@@ -1,7 +1,7 @@
 {
   "compilerOptions": {
     "target": "es2017",
-    "module": "commonjs",
+    "module": "esnext",
     "strict": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
@@ -18,5 +18,5 @@
     "esModuleInterop": true
   },
   "include": ["src/**/*"],
-  "exclude": ["dist", "node_modules", "tests"]
+  "exclude": ["dist", "node_modules", "test"]
 }
