@@ -7,10 +7,10 @@
   "browser": "dist/numcodecs.umd.js",
   "repository": {
     "type": "git",
-    "url": "github.com/manzt/numcodecs"
+    "url": "github.com/manzt/numcodecs.js"
   },
   "scripts": {
-    "build": "tsc --emitDeclarationOnly --declarationDir ./dist/types && rollup -c",
+    "build": "tsc --emitDeclarationOnly && rollup -c",
     "prebuild": "rm -rf dist",
     "lint": "tsc --noEmit && eslint ./src/**/*.ts --quiet --fix",
     "format": "./node_modules/.bin/prettier --write src/**/*.ts",
@@ -18,8 +18,7 @@
     "start": "rollup -c -w",
     "test": "jest --coverage",
     "test:watch": "jest --coverage --watch",
-    "test:prod": "npm run lint && npm run format:check && npm run test -- --no-cache",
-    "create-type-checkers": "./node_modules/ts-interface-builder/bin/ts-interface-builder ./src/types.ts"
+    "test:prod": "npm run lint && npm run format:check && npm run test -- --no-cache"
   },
   "keywords": [
     "zarr",
@@ -59,7 +58,6 @@
     ]
   },
   "dependencies": {
-    "pako": "^1.0.11",
-    "ts-interface-checker": "^0.1.10"
+    "pako": "^1.0.11"
   }
 }
