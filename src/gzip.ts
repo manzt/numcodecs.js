@@ -1,14 +1,14 @@
-import { Codec } from './types';
+import { Codec, CompressorConfig } from './types';
 import { ValueError } from './errors';
 import pako from 'pako';
 
-export type ValidGZipLevelSetting = -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+export type ValidGZipLevelSetting = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
 export class GZip implements Codec {
-  public codecId = 'gzip';
+  public static codecId = 'gzip';
   public level: ValidGZipLevelSetting;
 
-  constructor(level: number) {
+  constructor({ level = 1 }: CompressorConfig) {
     if (level < 0 || level > 9) {
       throw new ValueError(
         'Invalid gzip compression level, it should be between 0 and 9',
@@ -28,7 +28,6 @@ export class GZip implements Codec {
       out.set(uncompressed);
       return out;
     }
-
     return uncompressed;
   }
 }
