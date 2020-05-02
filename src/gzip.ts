@@ -8,13 +8,17 @@ export class GZip implements Codec {
   public static codecId = 'gzip';
   public level: ValidGZipLevelSetting;
 
-  constructor({ level = 1 }: CompressorConfig) {
+  constructor(level = 1) {
     if (level < 0 || level > 9) {
       throw new ValueError(
         'Invalid gzip compression level, it should be between 0 and 9',
       );
     }
     this.level = level as ValidGZipLevelSetting;
+  }
+
+  static fromConfig({ level }: CompressorConfig): GZip {
+    return new GZip(level);
   }
 
   encode(data: Uint8Array): Uint8Array {

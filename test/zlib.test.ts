@@ -4,11 +4,11 @@ import { CompressorConfig } from '../src/types';
 import { range, product, checkEncodeDecode } from './common';
 
 const codecs = [
-  new Zlib({} as CompressorConfig),
-  new Zlib({ level: -1 } as CompressorConfig),
-  new Zlib({ level: 0 } as CompressorConfig),
-  new Zlib({ level: 5 } as CompressorConfig),
-  new Zlib({ level: 9 } as CompressorConfig),
+  new Zlib(),
+  new Zlib(-1),
+  new Zlib(0),
+  new Zlib(5),
+  new Zlib(9),
 ];
 
 const arrays = [

@@ -8,13 +8,17 @@ export class Zlib implements Codec {
   public static codecId = 'zlib';
   public level: ValidZlibLevelSetting;
 
-  constructor({ level = 1 }: CompressorConfig) {
+  constructor(level = 1) {
     if (level < -1 || level > 9) {
       throw new ValueError(
         'Invalid zlib compression level, it should be between -1 and 9',
       );
     }
     this.level = level as ValidZlibLevelSetting;
+  }
+
+  static fromConfig({ level }: CompressorConfig): Zlib {
+    return new Zlib(level);
   }
 
   encode(data: Uint8Array): Uint8Array {

@@ -2,7 +2,9 @@ import { CompressorConfig, Codec } from './types';
 import { GZip } from './gzip';
 import { Zlib } from './zlib';
 
-const registry = new Map().set(GZip.codecId, GZip).set(Zlib.codecId, Zlib);
+const registry = new Map();
+registry.set(GZip.codecId, GZip);
+registry.set(Zlib.codecId, Zlib);
 
 function getCodec<T extends Codec>(config: CompressorConfig): T {
   if (!registry.has(config.id)) {
@@ -11,7 +13,7 @@ function getCodec<T extends Codec>(config: CompressorConfig): T {
     );
   }
   const codec = registry.get(config.id);
-  return new codec(config);
+  return codec.fromConfig(config);
 }
 
 export { getCodec, GZip, Zlib };
