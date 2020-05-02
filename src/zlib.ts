@@ -4,7 +4,7 @@ import pako from 'pako';
 
 export type ValidZlibLevelSetting = -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
-export class Zlib implements Codec {
+class Zlib implements Codec {
   public static codecId = 'zlib';
   public level: ValidZlibLevelSetting;
 
@@ -35,3 +35,5 @@ export class Zlib implements Codec {
     return uncompressed;
   }
 }
+
+export default Zlib;

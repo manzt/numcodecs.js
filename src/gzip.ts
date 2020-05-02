@@ -4,7 +4,7 @@ import pako from 'pako';
 
 export type ValidGZipLevelSetting = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
-export class GZip implements Codec {
+class GZip implements Codec {
   public static codecId = 'gzip';
   public level: ValidGZipLevelSetting;
 
@@ -35,3 +35,5 @@ export class GZip implements Codec {
     return uncompressed;
   }
 }
+
+export default GZip;
