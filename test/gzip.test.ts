@@ -1,14 +1,8 @@
-import Zlib from '../src/codecs/zlib';
+import GZip from '../src/codecs/gzip';
 
 import { range, linspace, product, checkEncodeDecode } from './common';
 
-const codecs = [
-  new Zlib(),
-  new Zlib(-1),
-  new Zlib(0),
-  new Zlib(5),
-  new Zlib(9),
-];
+const codecs = [new GZip(), new GZip(2), new GZip(0), new GZip(5), new GZip(9)];
 
 const arrays = [
   range(1000, '<u4'),

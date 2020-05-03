@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Codec } from '../src/types';
 
 export type TypedArray =
@@ -30,21 +31,21 @@ export type DtypeString =
   | '<b'
   | '<B';
 
-// const DTYPE_MAP = new Map<DtypeString, TypedArrayConstructor<TypedArray>>()
-//   .set('<b', Int8Array)
-//   .set('<B', Uint8Array)
-//   .set('<u1', Uint8Array)
-//   .set('<i1', Int8Array)
-//   .set('<u2', Uint16Array)
-//   .set('<i2', Int16Array)
-//   .set('<u4', Uint32Array)
-//   .set('<i4', Int32Array)
-//   .set('<f4', Float32Array)
-//   .set('<f8', Float64Array);
+const DTYPE_MAP = new Map<DtypeString, TypedArrayConstructor<TypedArray>>()
+  .set('<b', Int8Array)
+  .set('<B', Uint8Array)
+  .set('<u1', Uint8Array)
+  .set('<i1', Int8Array)
+  .set('<u2', Uint16Array)
+  .set('<i2', Int16Array)
+  .set('<u4', Uint32Array)
+  .set('<i4', Int32Array)
+  .set('<f4', Float32Array)
+  .set('<f8', Float64Array);
 
 export function range(len: number, dtype: DtypeString = '<f4'): TypedArray {
-  const ctr = Uint32Array;
-  return new ctr([...Array(len).keys()]);
+  const t = DTYPE_MAP.get(dtype) as TypedArrayConstructor<TypedArray>;
+  return new t([...Array(len).keys()]);
 }
 
 export function linspace(
@@ -62,20 +63,14 @@ export function linspace(
   return new ctr(arr);
 }
 
-function ensureByteArray(chunkData: TypedArray): Uint8Array {
-  if (typeof chunkData === 'string') {
-    return new Uint8Array(Buffer.from(chunkData).buffer);
-  }
-  return new Uint8Array(chunkData);
-}
-
 export function checkEncodeDecode<T extends Codec>(
   codec: T,
   arr: TypedArray,
 ): TypedArray {
   const enc = codec.encode(new Uint8Array(arr.buffer));
   const dec = codec.decode(enc);
-  return new Uint32Array(dec.buffer);
+  const t = arr.constructor as TypedArrayConstructor<TypedArray>;
+  return new t(dec.buffer);
 }
 
 export function* product<T extends Array<Iterable<any>>>(

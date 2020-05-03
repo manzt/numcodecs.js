@@ -60,7 +60,7 @@
   "jest": {
     "preset": "ts-jest",
     "collectCoverageFrom": [
-      "src/**/{!(types|errors|index),}.ts"
+      "src/**/{!(types|errors|index|dynamic-registry),}.ts"
     ]
   },
   "dependencies": {
