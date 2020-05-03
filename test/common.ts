@@ -73,10 +73,9 @@ export function checkEncodeDecode<T extends Codec>(
   codec: T,
   arr: TypedArray,
 ): TypedArray {
-  const buf = ensureByteArray(arr);
-  const enc = codec.encode(buf);
+  const enc = codec.encode(new Uint8Array(arr.buffer));
   const dec = codec.decode(enc);
-  return new Uint32Array(dec);
+  return new Uint32Array(dec.buffer);
 }
 
 export function* product<T extends Array<Iterable<any>>>(

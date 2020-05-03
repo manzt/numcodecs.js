@@ -1,8 +1,7 @@
 import { Codec, CompressorConfig } from './types';
 
-function getUrl(version: string, codecId: string): string {
-  return `https://cdn.pika.dev/numcodecs@${version}/codecs/${codecId}.js`;
-}
+const path = (v: string, id: string): string =>
+  `https://www.unpkg.com/numcodecs@${v}/dist/numcodecs/codecs/${id}.js`;
 
 const registry = new Set();
 registry.add('gzip');
@@ -17,7 +16,7 @@ async function getCodec<T extends Codec>(
       `Compression codec '${config.id}' is not supported by Zarr.js.`,
     );
   }
-  const { default: codec } = await import(getUrl(version, config.id));
+  const { default: codec } = await import(path(version, config.id));
   return codec.fromConfig(config);
 }
 

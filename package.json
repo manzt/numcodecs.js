@@ -1,10 +1,10 @@
 {
   "name": "numcodecs",
   "author": "Trevor James Manz",
-  "version": "0.0.0",
+  "version": "0.0.11",
   "description": "Buffer compression and transformation codecs for use in data storage and communication applications.",
   "type": "module",
-  "main": "./dist/numcodecs/index.js",
+  "main": "dist/numcodecs/index.js",
   "exports": {
     ".": "./dist/numcodecs/index.js",
     "./dynamic-registry": "./dist/numcodecs/dynamic-registry.js",

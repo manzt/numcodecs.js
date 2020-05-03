@@ -1,5 +1,4 @@
-import { Zlib } from '../src';
-import { CompressorConfig } from '../src/types';
+import Zlib from '../src/codecs/zlib';
 
 import { range, product, checkEncodeDecode } from './common';
 
