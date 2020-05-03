@@ -3,8 +3,14 @@
   "author": "Trevor James Manz",
   "version": "0.0.0",
   "description": "Buffer compression and transformation codecs for use in data storage and communication applications.",
-  "module": "dist/index.esm.js",
-  "browser": "dist/index.umd.js",
+  "type": "module",
+  "main": "./dist/numcodecs/index.js",
+  "exports": {
+    ".": "./dist/numcodecs/index.js",
+    "./dynamic-registry": "./dist/numcodecs/dynamic-registry.js",
+    "./codecs/": "./dist/numcodecs/codecs/",
+    "./package.json": "./package.json"
+  },
   "repository": {
     "type": "git",
     "url": "github.com/manzt/numcodecs.js"
