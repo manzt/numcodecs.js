@@ -3,6 +3,7 @@
 
 Examples:
 
+Some experiments with Node.js 14.1 [module exports](https://nodejs.org/api/modules.html).
 ```javascript
 // import entire registry
 import { getCodec } from 'numcodecs';
