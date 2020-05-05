@@ -1,27 +1,27 @@
 {
   "name": "numcodecs",
   "author": "Trevor James Manz",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "description": "Buffer compression and transformation codecs for use in data storage and communication applications.",
-  "main": "dist/index.js",
-  "module": "dist/index.module.js",
+  "main": "dist/index.cjs",
+  "module": "dist/index.js",
   "exports": {
     ".": {
-      "browser": "./dist/index.module.js",
+      "browser": "./dist/index.js",
       "import": "./dist/index.mjs",
-      "require": "./dist/index.js"
+      "require": "./dist/index.cjs"
     },
     "./gzip": {
-      "browser": "./dist/gzip.module.js",
+      "browser": "./dist/gzip.js",
       "umd": "./dist/gzip.umd.js",
       "import": "./dist/gzip.mjs",
-      "require": "./dist/gzip.js"
+      "require": "./dist/gzip.cjs"
     },
     "./zlib": {
-      "browser": "./dist/zlib.module.js",
+      "browser": "./dist/zlib.js",
       "umd": "./dist/zlib.umd.js",
       "import": "./dist/zlib.mjs",
-      "require": "./dist/zlib.js"
+      "require": "./dist/zlib.cjs"
     }
   },
   "repository": {
