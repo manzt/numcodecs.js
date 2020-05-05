@@ -17,6 +17,7 @@ import GZip from 'numcodecs/gzip';
 // or
 const { default: GZip } = await import("https://cdn.pika.dev/numcodecs/^0.0.12/gzip");
 
+const codec = GZip.fromConfig(config); // or new GZip(1)
 
 // Usage
 const arr = new Float32Array([1, 2, 3, 4, 5, 6]);
