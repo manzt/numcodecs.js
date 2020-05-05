@@ -3,21 +3,23 @@
 
 Examples:
 
-Some experiments with Node.js 14.1 [module exports](https://nodejs.org/api/modules.html).
+Some experiments with Node.js 14.1 [package exports](https://nodejs.org/api/modules.html).
 ```javascript
-const { config } = { id: 'gzip', level: 1 };
+// Rollup & webpack don't have great support for exports so the easiest
+// way to import from the main (since the lib is completely tree shakeable)
+import { GZip } from 'numcodecs';
 
-// Loading
-import { registry } from 'numcodecs';
-const GZip = await registry.get(config.id)();
+// Node 14 conditional exports
 
-// or
+// index.mjs
+import { GZip } from 'numcodecs';
 import GZip from 'numcodecs/gzip';
 
-// or
-const { default: GZip } = await import("https://cdn.pika.dev/numcodecs/^0.0.12/gzip");
+// index.js
+const GZip = require('numcodecs').GZip;
+const GZip = require('numcodecs/gzip');
 
-const codec = GZip.fromConfig(config); // or new GZip(1)
+const codec = GZip.fromConfig({ level: 1 }); // or new GZip(1);
 
 // Usage
 const arr = new Float32Array([1, 2, 3, 4, 5, 6]);
