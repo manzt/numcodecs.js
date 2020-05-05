@@ -5,17 +5,18 @@ Examples:
 
 Some experiments with Node.js 14.1 [module exports](https://nodejs.org/api/modules.html).
 ```javascript
-// import entire registry
-import { getCodec } from 'numcodecs';
-const codec = getCodec({id: 'gzip', level: 1});
+const { config } = { id: 'gzip', level: 1 };
 
-// use a dynamic registry, utilizing dynamic imports
-import { getCodec } from 'numcodecs/dynamic-registry';
-const codec = await getCodec({id: 'gzip', level: 1});
+// Loading
+import { registry } from 'numcodecs';
+const GZip = await registry.get(config.id)();
 
-// import individual codecs
-import GZip from 'numcodecs/codec/gzip.js';
-const codec = new GZip(1);
+// or
+import GZip from 'numcodecs/gzip';
+
+// or
+const { default: GZip } = await import("https://cdn.pika.dev/numcodecs/^0.0.12/gzip");
+
 
 // Usage
 const arr = new Float32Array([1, 2, 3, 4, 5, 6]);
