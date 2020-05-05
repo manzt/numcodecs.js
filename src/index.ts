@@ -1,3 +1,2 @@
-export const registry = new Map()
-  .set('gzip', () => import('./gzip'))
-  .set('zlib', () => import('./zlib'));
+export { default as GZip } from './gzip';
+export { default as Zlib } from './zlib';

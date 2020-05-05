@@ -10,24 +10,20 @@ export default [
   {
     input: { index: './src/index.ts', ...inputs },
     output: [
-      { dir: './dist', format: 'cjs' },
-      {
-        dir: './dist',
-        format: 'es',
-        entryFileNames: '[name].mjs',
-        chunkFileNames: '[name]-[hash].mjs',
-      },
+      { dir: './dist', format: 'cjs', sourcemap: true },
       {
         dir: './dist',
         format: 'es',
         entryFileNames: '[name].module.js',
         chunkFileNames: '[name]-[hash].module.js',
+        sourcemap: true,
       },
     ],
     plugins: [
       typescript({ declaration: true, declarationDir: './dist/types/' }),
       commonjs(),
       resolve(),
+      terser(),
     ],
   },
   ...Object.entries(inputs).map(([codec, input]) => ({
