@@ -10,18 +10,19 @@ export default [
   {
     input: { index: './src/index.ts', ...inputs },
     output: [
-      { dir: './dist', format: 'cjs', sourcemap: true },
+      { dir: './dist', format: 'es', sourcemap: true },
+      {
+        dir: './dist',
+        format: 'cjs',
+        entryFileNames: '[name].cjs',
+        chunkFileNames: '[name]-[hash].cjs',
+        sourcemap: true,
+      },
       {
         dir: './dist',
         format: 'es',
         entryFileNames: '[name].mjs',
         chunkFileNames: '[name]-[hash].mjs',
-      },
-      {
-        dir: './dist',
-        format: 'es',
-        entryFileNames: '[name].module.js',
-        chunkFileNames: '[name]-[hash].module.js',
         sourcemap: true,
       },
     ],
