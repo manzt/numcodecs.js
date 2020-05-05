@@ -1,5 +1,4 @@
-import { Codec, CompressorConfig } from '../types';
-import { ValueError } from '../errors';
+import { Codec, CompressorConfig } from './types';
 import pako from 'pako';
 
 export type ValidZlibLevelSetting = -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
@@ -10,7 +9,7 @@ class Zlib implements Codec {
 
   constructor(level = 1) {
     if (level < -1 || level > 9) {
-      throw new ValueError(
+      throw new Error(
         'Invalid zlib compression level, it should be between -1 and 9',
       );
     }

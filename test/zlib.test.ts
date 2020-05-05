@@ -1,4 +1,4 @@
-import Zlib from '../src/codecs/zlib';
+import Zlib from '../src/zlib';
 
 import { range, linspace, product, checkEncodeDecode } from './common';
 
