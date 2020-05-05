@@ -1,26 +1,46 @@
 import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
+import { terser } from 'rollup-plugin-terser';
 
 const codecs = ['zlib', 'gzip'];
+const inputs = Object.fromEntries(codecs.map((c) => [c, `./src/${c}.ts`]));
 
 export default [
   {
-    input: 'src/index.ts',
-    output: [{ file: './dist/numcodecs/index.js', format: 'es' }],
-    watch: { include: 'src/**' },
-    plugins: [typescript(), commonjs(), resolve()],
+    input: { index: './src/index.ts', ...inputs },
+    output: [
+      { dir: './dist', format: 'cjs' },
+      {
+        dir: './dist',
+        format: 'es',
+        entryFileNames: '[name].mjs',
+        chunkFileNames: '[name]-[hash].mjs',
+      },
+      {
+        dir: './dist',
+        format: 'es',
+        entryFileNames: '[name].module.js',
+        chunkFileNames: '[name]-[hash].module.js',
+      },
+    ],
+    plugins: [
+      typescript({ declaration: true, declarationDir: './dist/types/' }),
+      commonjs(),
+      resolve(),
+    ],
   },
-  {
-    input: 'src/dynamic-registry.ts',
-    output: [{ file: './dist/numcodecs/dynamic-registry.js', format: 'es' }],
-    watch: { include: 'src/**' },
-    plugins: [typescript(), resolve()],
-  },
-  {
-    input: codecs.map(c => `src/codecs/${c}.ts`),
-    output: [{ dir: './dist/numcodecs/codecs/', format: 'es' }],
-    watch: { include: 'src/**' },
-    plugins: [typescript(), commonjs(), resolve()],
-  },
+  ...Object.entries(inputs).map(([codec, input]) => ({
+    input,
+    output: [
+      {
+        dir: './dist',
+        format: 'umd',
+        name: codec,
+        entryFileNames: '[name].umd.js',
+        esModule: false,
+      },
+    ],
+    plugins: [typescript(), commonjs(), resolve(), terser()],
+  })),
 ];

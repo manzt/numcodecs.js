@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import { Codec } from '../src/types';
 
 export type TypedArray =
@@ -54,13 +53,13 @@ export function linspace(
   num: number,
   dtype: DtypeString = '<f4',
 ): TypedArray {
-  const ctr = Uint32Array;
   const arr = [];
   const step = (stop - start) / (num - 1);
   for (let i = 0; i < num; i++) {
     arr.push(start + step * i);
   }
-  return new ctr(arr);
+  const t = DTYPE_MAP.get(dtype) as TypedArrayConstructor<TypedArray>;
+  return new t(arr);
 }
 
 export function checkEncodeDecode<T extends Codec>(

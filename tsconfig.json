@@ -1,6 +1,6 @@
 {
   "compilerOptions": {
-    "target": "es2017",
+    "target": "es2020",
     "module": "esnext",
     "strict": true,
     "moduleResolution": "node",
@@ -14,9 +14,8 @@
     "lib": ["dom", "esnext"],
     "noEmitOnError": false,
     "baseUrl": ".",
-    "declaration": true,
     "esModuleInterop": true,
-    "declarationDir": "./dist/types"
+    "rootDir": "src/"
   },
   "include": ["src/**/*"],
   "exclude": ["dist", "node_modules", "test/**/*.ts"]

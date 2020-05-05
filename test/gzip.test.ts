@@ -1,4 +1,4 @@
-import GZip from '../src/codecs/gzip';
+import GZip from '../src/gzip';
 
 import { range, linspace, product, checkEncodeDecode } from './common';
 
