@@ -14,6 +14,12 @@ export default [
       {
         dir: './dist',
         format: 'es',
+        entryFileNames: '[name].mjs',
+        chunkFileNames: '[name]-[hash].mjs',
+      },
+      {
+        dir: './dist',
+        format: 'es',
         entryFileNames: '[name].module.js',
         chunkFileNames: '[name]-[hash].module.js',
         sourcemap: true,
