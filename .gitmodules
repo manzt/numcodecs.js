@@ -1,0 +1,3 @@
+[submodule "src/blosc-wasm/c-blosc"]
+	path = src/blosc-wasm/c-blosc
+	url = https://github.com/manzt/c-blosc.git

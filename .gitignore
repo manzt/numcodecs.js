@@ -17,3 +17,8 @@ node_modules/
 
 # distribution dir
 dist/
+
+
+# blosc 
+src/blosc-wasm/build/*
+src/blosc-wasm/target/*
