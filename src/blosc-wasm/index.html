@@ -6,59 +6,6 @@
     <title>Document</title>
   </head>
   <body>
-    <script src="./a.out.js"></script>
-    <script>
-      class Codec {
-        constructor({ blocksize = 0, clevel = 5, cname = 'lz4', shuffle = 1 }) {
-          this.blocksize = blocksize;
-          this.clevel = clevel;
-          this.cname = cname;
-          this.shuffle = shuffle;
-        }
-        encode(arr) {
-          const encoded = blosc.compress(
-            arr,
-            this.blocksize,
-            this.clevel,
-            this.cname,
-            this.shuffle,
-          );
-          return encoded;
-        }
-        decode(arr) {
-          const decoded = blosc.decompress(arr);
-          return decoded;
-        }
-      }
-
-      const baseUrl =
-        `https://gist.githubusercontent.com/manzt/` +
-        `a20e2a78267b992b1f6c9ca036b91db9/raw/` +
-        `bc79cf1cb5cf6fb4c2891bef94c7a8b7b044aa70/`;
-
-      // const metadata = await fetch(`${baseUrl}/.zarray`).then((res) => res.json());
-
-      Module.onRuntimeInitialized = async (_) => {
-        const blosc = {
-          decode: Module.cwrap('decode', 'number', ['number', 'number']),
-        };
-        const chunkData = await fetch(`${baseUrl}/0.0`)
-          .then((res) => res.arrayBuffer())
-          .then((buf) => new Uint8Array(buf));
-
-        const p = Module._malloc(chunkData.byteLength);
-        Module.HEAP8.set(chunkData, p);
-
-        const p2 = Module._malloc(chunkData.byteLength);
-        const len = blosc.decode(p, p2);
-
-        const resultView = new Uint8Array(Module.HEAP8.buffer, p2, len);
-        const result = new Uint8Array(resultView);
-        Module._free(p);
-        Module._free(p2);
-
-        console.log(new Float64Array(result.buffer))
-      };
-    </script>
+    <script type="module" src="index.js"></script>
   </body>
 </html>
