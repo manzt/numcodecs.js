@@ -40,15 +40,22 @@ echo "============================================="
 cd ../
 
 # Should try USE_ES6_IMPORT_META=0, to run testing?
-emcc blosc_codec.c \
-  ${OPTIMIZE} \
-  -s STRICT=1 \
-  -s EXPORT_ES6=1 \
-  -s MODULARIZE=1 \
-  -s MALLOC=emmalloc \
-  -s EXPORTED_FUNCTIONS="['_free', '_malloc', '_b_decompress', '_b_compress', '_get_nbytes']" \
-  -s 'EXPORT_NAME="blosc_codec"' \
-  -I c-blosc/blosc \
-  -lblosc \
-  -L build/blosc \
-  -o blosc_codec.js
+(
+  emcc blosc_codec.c \
+    ${OPTIMIZE} \
+    -s STRICT=1 \
+    -s EXPORT_ES6=1 \
+    -s MODULARIZE=1 \
+    -s MALLOC=emmalloc \
+    -s EXPORTED_FUNCTIONS="['_free', '_malloc', '_b_decompress', '_b_compress', '_get_nbytes']" \
+    -s EXPORT_NAME="blosc_codec" \
+    -s ENVIRONMENT="web" \
+    -I c-blosc/blosc \
+    -lblosc \
+    -L build/blosc \
+    -o blosc_codec.js
+)
+
+echo "============================================="
+echo "Compiling wasm bindings done"
+echo "============================================="
