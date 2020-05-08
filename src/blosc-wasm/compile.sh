@@ -46,6 +46,7 @@ emcc codec.c \
   -s EXPORTED_FUNCTIONS="['_free', '_malloc', '_b_decompress', '_b_compress', '_get_nbytes']" \
   -I c-blosc/blosc \
   -lblosc \
-  -L build/blosc
+  -L build/blosc \
+  -o blosc_module.js
 
 

@@ -1,4 +1,4 @@
-import wasmModule from '/a.out.js';
+import wasmModule from '/blosc_module.js';
 
 // From https://github.com/GoogleChromeLabs/squoosh/blob/master/src/codecs/util.ts
 export function initEmscriptenModule(moduleFactory) {
