@@ -80,7 +80,7 @@
           );
           const compressed = new Uint8Array(compressedView);
           Module._free(ptr);
-          console.log('Decompressed chunk', compressed);
+          console.log('Compressed chunk', compressed);
         };
       })();
     </script>
