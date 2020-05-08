@@ -1,9 +1,11 @@
-import Blosc, { Shuffle, BloscConfig } from '../src/blosc';
-// eslint-disable-next-line @typescript-eslint/camelcase
-import blosc_codec from '../codecs/blosc/blosc_codec';
-import { initEmscriptenModule } from '../src/utils';
+import Blosc, {
+  Shuffle,
+  BloscConfig,
+  CompressionLevel,
+  CompressionName,
+} from '../src/blosc';
 
-import { range, linspace, product, checkEncodeDecode } from './common';
+import { range, linspace, product, checkAsyncEncodeDecode } from './common';
 
 const codecConfigs: BloscConfig[] = [
   { shuffle: Shuffle.SHUFFLE },
@@ -28,13 +30,19 @@ const arrays = [
 ];
 
 test('ensure all equal', async () => {
-  const wasmInstance = await initEmscriptenModule(blosc_codec);
-  for (const [{ clevel, cname, blocksize, shuffle }, arr] of product(
+  const codec = new Blosc();
+  for (const [{ cname, clevel, shuffle, blocksize }, arr] of product(
     codecConfigs,
     arrays,
   )) {
-    const codec = new Blosc(clevel, cname, shuffle, blocksize, wasmInstance);
-    const encAndDec = checkEncodeDecode(codec, arr);
+    // Rather than reloading all the webassembly,
+    // just reuse the loaded emscripten module and update the properties
+    if (cname) codec.cname = cname as CompressionName;
+    if (clevel) codec.clevel = clevel as CompressionLevel;
+    if (shuffle) codec.shuffle = shuffle;
+    if (blocksize) codec.blocksize = blocksize;
+
+    const encAndDec = await checkAsyncEncodeDecode(codec, arr);
     expect(arr).toEqual(encAndDec);
   }
 });

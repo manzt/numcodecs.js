@@ -42,18 +42,14 @@ class Blosc implements Codec {
   public cname: CompressionName;
   public shuffle: Shuffle;
   public blocksize: number;
-  private _wasmInstance: BloscModule;
+  private emscriptenModule?: Promise<BloscModule>;
 
   constructor(
     clevel = 5,
     cname = 'lz4',
     shuffle = Shuffle.SHUFFLE,
     blocksize = 0,
-    wasmInstance?: BloscModule,
   ) {
-    if (!wasmInstance) {
-      throw Error('Must instanitate from async static contructor');
-    }
     if (clevel < 0 || clevel > 9) {
       throw new Error(
         `Invalid blosc compression 'clevel', it should be between 0 and 9`,
@@ -65,25 +61,27 @@ class Blosc implements Codec {
         one of 'blosclz', 'lz4', 'lz4hc','snappy', 'zlib', 'zstd'.`,
       );
     }
-    this._wasmInstance = wasmInstance;
     this.blocksize = blocksize;
     this.clevel = clevel as CompressionLevel;
     this.cname = cname as CompressionName;
     this.shuffle = shuffle;
   }
 
-  static async fromConfig({
+  static fromConfig({
     blocksize,
     clevel,
     cname,
     shuffle,
-  }: BloscConfig & CompressorConfig): Promise<Blosc> {
-    const wasmInstance = await initEmscriptenModule(blosc_codec);
-    return new Blosc(clevel, cname, shuffle, blocksize, wasmInstance);
+  }: BloscConfig & CompressorConfig): Blosc {
+    return new Blosc(clevel, cname, shuffle, blocksize);
   }
 
-  encode(data: Uint8Array): Uint8Array {
-    const { _b_compress: compress, _malloc, _free, HEAP8 } = this._wasmInstance;
+  async encode(data: Uint8Array): Promise<Uint8Array> {
+    if (!this.emscriptenModule) {
+      this.emscriptenModule = initEmscriptenModule(blosc_codec);
+    }
+    const module = await this.emscriptenModule;
+    const { _b_compress: compress, _malloc, _free, HEAP8 } = module;
     const ptr = _malloc(data.byteLength + data.byteLength + BLOSC_MAX_OVERHEAD);
     const destPtr = ptr + data.byteLength;
     HEAP8.set(data, ptr);
@@ -106,14 +104,18 @@ class Blosc implements Codec {
     return result;
   }
 
-  decode(data: Uint8Array, out?: Uint8Array): Uint8Array {
+  async decode(data: Uint8Array, out?: Uint8Array): Promise<Uint8Array> {
+    if (!this.emscriptenModule) {
+      this.emscriptenModule = initEmscriptenModule(blosc_codec);
+    }
+    const module = await this.emscriptenModule;
     const {
       _b_decompress: decompress,
       _get_nbytes: getNbytes,
       _malloc,
       _free,
       HEAP8,
-    } = this._wasmInstance;
+    } = module;
     // Allocate memory to copy source array
     const sourcePtr = _malloc(data.byteLength);
     HEAP8.set(data, sourcePtr);

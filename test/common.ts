@@ -66,8 +66,18 @@ export function checkEncodeDecode<T extends Codec>(
   codec: T,
   arr: TypedArray,
 ): TypedArray {
-  const enc = codec.encode(new Uint8Array(arr.buffer));
-  const dec = codec.decode(enc);
+  const enc = codec.encode(new Uint8Array(arr.buffer)) as Uint8Array;
+  const dec = codec.decode(enc) as Uint8Array;
+  const t = arr.constructor as TypedArrayConstructor<TypedArray>;
+  return new t(dec.buffer);
+}
+
+export async function checkAsyncEncodeDecode<T extends Codec>(
+  codec: T,
+  arr: TypedArray,
+): Promise<TypedArray> {
+  const enc = await codec.encode(new Uint8Array(arr.buffer));
+  const dec = await codec.decode(enc);
   const t = arr.constructor as TypedArrayConstructor<TypedArray>;
   return new t(dec.buffer);
 }
@@ -83,9 +93,9 @@ export function* product<T extends Array<Iterable<any>>>(
     return;
   }
   // make a list of iterators from the iterables
-  const iterators = iterables.map(it => it[Symbol.iterator]());
-  const results = iterators.map(it => it.next());
-  if (results.some(r => r.done)) {
+  const iterators = iterables.map((it) => it[Symbol.iterator]());
+  const results = iterators.map((it) => it.next());
+  if (results.some((r) => r.done)) {
     throw new Error('Input contains an empty iterator.');
   }
 
