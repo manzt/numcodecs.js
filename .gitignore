@@ -19,6 +19,5 @@ node_modules/
 dist/
 
 
-# blosc 
-src/blosc-wasm/build/*
-src/blosc-wasm/target/*
+# ignore codec builds
+codecs/**/build/
