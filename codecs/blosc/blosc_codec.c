@@ -19,6 +19,8 @@ int b_decompress(uint8_t *src, uint8_t *dest)
 
 int b_compress(uint8_t *src, uint8_t *dest, int clevel, int shuffle, int blocksize, int nbytes, int cindex)
 {
+    // TODO: would be ideal to pass Javascript string to C somehow and
+    // and remove shared indexing in Typescript binding.
     char *compressors[] = {"blosclz", "lz4", "lz4hc", "snappy", "zlib", "zstd"};
     const char *cname;
     int dsize;
