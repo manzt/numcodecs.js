@@ -15,8 +15,8 @@
     "noEmitOnError": false,
     "baseUrl": ".",
     "esModuleInterop": true,
-    "rootDir": "src/"
+    "rootDir": "."
   },
-  "include": ["src/**/*", "codecs/**/*"],
+  "includes": ["src/**/*", "codecs/**/*"],
   "exclude": ["dist", "node_modules", "test/**/*.ts"]
 }

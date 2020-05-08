@@ -1,5 +1,6 @@
-import { Codec } from './types';
+import { Codec, CompressorConfig } from './types';
 import { initEmscriptenModule } from './utils';
+// eslint-disable-next-line @typescript-eslint/camelcase
 import blosc_codec, { BloscModule } from '../codecs/blosc/blosc_codec';
 
 const BLOSC_MAX_OVERHEAD = 16;
@@ -20,6 +21,13 @@ export type CompressionName =
   | 'zlib'
   | 'zstd';
 
+export interface BloscConfig {
+  blocksize?: number;
+  clevel?: number;
+  cname?: string;
+  shuffle?: Shuffle;
+}
+
 const COMPRESSOR_MAP = new Map()
   .set('blosclz', 0)
   .set('lz4', 1)
@@ -30,19 +38,19 @@ const COMPRESSOR_MAP = new Map()
 
 class Blosc implements Codec {
   public static codecId = 'blosc';
-  public blocksize: number;
   public clevel: CompressionLevel;
   public cname: CompressionName;
   public shuffle: Shuffle;
+  public blocksize: number;
   private _wasmInstance: BloscModule;
 
-  constructor({
+  constructor(
     clevel = 5,
     cname = 'lz4',
     shuffle = Shuffle.SHUFFLE,
     blocksize = 0,
-    wasmInstance,
-  }) {
+    wasmInstance?: BloscModule,
+  ) {
     if (!wasmInstance) {
       throw Error('Must instanitate from async static contructor');
     }
@@ -69,9 +77,9 @@ class Blosc implements Codec {
     clevel,
     cname,
     shuffle,
-  }): Promise<Blosc> {
+  }: BloscConfig & CompressorConfig): Promise<Blosc> {
     const wasmInstance = await initEmscriptenModule(blosc_codec);
-    return new Blosc({ blocksize, clevel, cname, shuffle, wasmInstance });
+    return new Blosc(clevel, cname, shuffle, blocksize, wasmInstance);
   }
 
   encode(data: Uint8Array): Uint8Array {

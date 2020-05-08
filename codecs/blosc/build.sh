@@ -14,11 +14,12 @@ echo "============================================="
 emcmake cmake ../c-blosc
 cmake --build .
 
-
 echo "============================================="
 echo "Compiling wasm bindings"
 echo "============================================="
 cd ../
+
+# Should try USE_ES6_IMPORT_META=0, to run testing?
 emcc blosc_codec.c \
   ${OPTIMIZE} \
   -s STRICT=1 \
