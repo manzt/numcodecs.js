@@ -5,15 +5,15 @@ import blosc_codec, { BloscModule } from '../codecs/blosc/blosc_codec';
 
 const BLOSC_MAX_OVERHEAD = 16;
 
-export enum Shuffle {
+enum BloscShuffle {
   NOSHUFFLE = 0,
   SHUFFLE = 1,
   BITSHUFFLE = 2,
   AUTOSHUFFLE = -1,
 }
 
-export type CompressionLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
-export type CompressionName =
+type BloscCompressionLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+type BloscCompressionName =
   | 'blosclz'
   | 'lz4'
   | 'lz4hc'
@@ -21,11 +21,11 @@ export type CompressionName =
   | 'zlib'
   | 'zstd';
 
-export interface BloscConfig {
+interface BloscConfig {
   blocksize?: number;
   clevel?: number;
   cname?: string;
-  shuffle?: Shuffle;
+  shuffle?: BloscShuffle;
 }
 
 const COMPRESSOR_MAP = new Map()
@@ -36,18 +36,19 @@ const COMPRESSOR_MAP = new Map()
   .set('zlib', 4)
   .set('zstd', 5);
 
+let emscriptenModule: Promise<BloscModule>;
+
 class Blosc implements Codec {
   public static codecId = 'blosc';
-  public clevel: CompressionLevel;
-  public cname: CompressionName;
-  public shuffle: Shuffle;
+  public clevel: BloscCompressionLevel;
+  public cname: BloscCompressionName;
+  public shuffle: BloscShuffle;
   public blocksize: number;
-  private emscriptenModule?: Promise<BloscModule>;
 
   constructor(
     clevel = 5,
     cname = 'lz4',
-    shuffle = Shuffle.SHUFFLE,
+    shuffle = BloscShuffle.SHUFFLE,
     blocksize = 0,
   ) {
     if (clevel < 0 || clevel > 9) {
@@ -62,8 +63,8 @@ class Blosc implements Codec {
       );
     }
     this.blocksize = blocksize;
-    this.clevel = clevel as CompressionLevel;
-    this.cname = cname as CompressionName;
+    this.clevel = clevel as BloscCompressionLevel;
+    this.cname = cname as BloscCompressionName;
     this.shuffle = shuffle;
   }
 
@@ -77,10 +78,10 @@ class Blosc implements Codec {
   }
 
   async encode(data: Uint8Array): Promise<Uint8Array> {
-    if (!this.emscriptenModule) {
-      this.emscriptenModule = initEmscriptenModule(blosc_codec);
+    if (!emscriptenModule) {
+      emscriptenModule = initEmscriptenModule(blosc_codec);
     }
-    const module = await this.emscriptenModule;
+    const module = await emscriptenModule;
     const { _b_compress: compress, _malloc, _free, HEAP8 } = module;
     const ptr = _malloc(data.byteLength + data.byteLength + BLOSC_MAX_OVERHEAD);
     const destPtr = ptr + data.byteLength;
@@ -105,10 +106,10 @@ class Blosc implements Codec {
   }
 
   async decode(data: Uint8Array, out?: Uint8Array): Promise<Uint8Array> {
-    if (!this.emscriptenModule) {
-      this.emscriptenModule = initEmscriptenModule(blosc_codec);
+    if (!emscriptenModule) {
+      emscriptenModule = initEmscriptenModule(blosc_codec);
     }
-    const module = await this.emscriptenModule;
+    const module = await emscriptenModule;
     const {
       _b_decompress: decompress,
       _get_nbytes: getNbytes,
