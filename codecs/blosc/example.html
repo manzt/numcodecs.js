@@ -6,81 +6,43 @@
     <title>Blosc codec example</title>
   </head>
   <body>
-    <script>
-      const baseUrl =
-        `https://gist.githubusercontent.com/manzt/` +
-        `a20e2a78267b992b1f6c9ca036b91db9/raw/` +
-        `c76b54c4d612871e9c4df0a124080af11eca42a5`;
-      async function loadZarrChunk() {
-        const metadata = await fetch(`${baseUrl}/.zarray`).then((res) =>
-          res.json(),
-        );
-        const chunkData = await fetch(`${baseUrl}/0.0`)
-          .then((res) => res.arrayBuffer())
-          .then((buf) => new Uint8Array(buf));
-        return { chunkData, metadata };
-      }
-
-      function configToString(zarrMetadata) {
-        const { clevel, shuffle, blocksize, cname } = zarrMetadata.compressor;
-        return `clevel=${clevel}, shuffle=${shuffle}, blocksize=${blocksize}, cname=${cname}`;
-      }
-
+    <script type="module">
+      import blosc_codec from './blosc_codec.js';
       (async () => {
-        const blosc_codec = await import('./blosc_codec.js');
-        const Module = blosc_codec.default();
+        const Module = blosc_codec();
         Module.onRuntimeInitialized = async (_) => {
-          const { chunkData, metadata } = await loadZarrChunk();
-          console.log('Compressed chunkData:', chunkData);
-          console.log(
-            'Chunk dtype is uint32:',
-            metadata.dtype,
-            '. Compression config: ',
-            configToString(metadata),
-          );
+          const size = 100000;
+          const arr = new Uint32Array(size);
+          for (let i = 0; i < size; i++) {
+            arr[i] = i;
+          }
 
-          console.log('Decompressing chunk...');
-          const sourcePtr = Module._malloc(chunkData.byteLength);
-          Module.HEAP8.set(chunkData, sourcePtr);
-          const nBytes = Module._get_nbytes(sourcePtr);
-          let destPtr = Module._malloc(nBytes);
-          let ret = Module._b_decompress(sourcePtr, destPtr);
-          const decodedView = new Uint8Array(
-            Module.HEAP8.buffer,
-            destPtr,
-            nBytes,
-          );
-          const decoded = new Uint8Array(decodedView);
-          Module._free(sourcePtr);
-          Module._free(destPtr);
-          console.log('Decompressed chunk', new Uint32Array(decoded.buffer));
+          console.log('Original:', arr);
+
+          const bytes = new Uint8Array(arr.buffer);
+          console.log('Bytes:', bytes);
 
           console.log(`Compressing decoded chunk...`);
-          console.log(`Using config ${configToString(metadata)}.`);
-          const { clevel, shuffle, blocksize, cname } = metadata.compressor;
-          const BLOSC_MAX_OVERHEAD = 16;
-          const ptr = Module._malloc(
-            decoded.byteLength + decoded.byteLength + BLOSC_MAX_OVERHEAD,
+          const cname = 'lz4';
+          const clevel = 5;
+          const shuffle = 1;
+          const blocksize = 0;
+          const compressed = Module.compress(
+            bytes,
+            'lz4',
+            clevel,
+            shuffle,
+            blocksize,
           );
-          destPtr = ptr + decoded.byteLength;
-          Module.HEAP8.set(decoded, ptr);
-          const cBytes = Module._b_compress(
-            ptr,
-            destPtr,
-            metadata.compressor.clevel,
-            metadata.compressor.shuffle,
-            metadata.compressor,
-            decoded.length,
-            1, // cname 'lz4' is 1
-          );
-          const compressedView = new Uint8Array(
-            Module.HEAP8.buffer,
-            destPtr,
-            cBytes,
-          );
-          const compressed = new Uint8Array(compressedView);
-          Module._free(ptr);
-          console.log('Compressed chunk', compressed);
+
+          Module.free_result();
+          console.log(compressed);
+
+          console.log('Decompressing chunk...');
+          const dBuffer = Module.decompress(compressed);
+          const decompressed = new Uint8Array(dBuffer);
+          Module.free_result();
+          console.log(new Uint32Array(decompressed.buffer));
         };
       })();
     </script>

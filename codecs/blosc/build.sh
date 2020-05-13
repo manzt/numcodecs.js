@@ -1,4 +1,5 @@
-#!/bin/sh
+#!/usr/bin/env bash
+
 set -e
 mkdir build
 cd build
@@ -39,23 +40,32 @@ echo "Compiling wasm bindings"
 echo "============================================="
 cd ../
 
-# Should try USE_ES6_IMPORT_META=0, to run testing?
 (
-  emcc blosc_codec.c \
+  emcc blosc_codec.cpp \
     ${OPTIMIZE} \
-    -s STRICT=1 \
-    -s EXPORT_ES6=1 \
+    --closure 1 \
+    --bind \
+    -s ALLOW_MEMORY_GROWTH=1 \
     -s MODULARIZE=1 \
-    -s MALLOC=emmalloc \
-    -s EXPORTED_FUNCTIONS="['_free', '_malloc', '_b_decompress', '_b_compress', '_get_nbytes']" \
-    -s EXPORT_NAME="blosc_codec" \
+    -s EXPORT_ES6=1 \
     -s ENVIRONMENT="web" \
+    -s EXPORT_NAME="blosc_codec" \
+    -x c++ \
+    --std=c++11 \
     -I c-blosc/blosc \
     -lblosc \
     -L build/blosc \
-    -o blosc_codec.js
+    -o blosc_codec.js \
 )
 
 echo "============================================="
-echo "Compiling wasm bindings done"
+echo "Encode binary as base64."
+echo "============================================="
+
+echo -en "const wasmBase64 = \`" > ./blosc_codec_wasm.js
+base64 ./blosc_codec.wasm | tr -d "\n" >> ./blosc_codec_wasm.js
+echo -en "\`;\n\nexport default wasmBase64;\n" >> ./blosc_codec_wasm.js
+
+echo "============================================="
+echo "Finished."
 echo "============================================="

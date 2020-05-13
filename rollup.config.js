@@ -1,49 +1,36 @@
-import commonjs from '@rollup/plugin-commonjs';
-import resolve from '@rollup/plugin-node-resolve';
-import typescript from '@rollup/plugin-typescript';
-import { terser } from 'rollup-plugin-terser';
+import commonjs from "@rollup/plugin-commonjs";
+import resolve from "@rollup/plugin-node-resolve";
+import typescript from "@rollup/plugin-typescript";
+import { terser } from "rollup-plugin-terser";
 
-const codecs = ['zlib', 'gzip'];
+const codecs = ["zlib", "gzip", "blosc"];
 const inputs = Object.fromEntries(codecs.map((c) => [c, `./src/${c}.ts`]));
 
 export default [
   {
-    input: { index: './src/index.ts', ...inputs },
+    input: { index: "./src/index.ts", ...inputs },
     output: [
-      { dir: './dist', format: 'es', sourcemap: true },
+      { dir: "./dist", format: "es", sourcemap: true },
       {
-        dir: './dist',
-        format: 'cjs',
-        entryFileNames: '[name].cjs',
-        chunkFileNames: '[name]-[hash].cjs',
+        dir: "./dist",
+        format: "cjs",
+        entryFileNames: "[name].cjs",
+        chunkFileNames: "[name]-[hash].cjs",
         sourcemap: true,
       },
       {
-        dir: './dist',
-        format: 'es',
-        entryFileNames: '[name].mjs',
-        chunkFileNames: '[name]-[hash].mjs',
+        dir: "./dist",
+        format: "es",
+        entryFileNames: "[name].mjs",
+        chunkFileNames: "[name]-[hash].mjs",
         sourcemap: true,
       },
     ],
     plugins: [
-      typescript({ declaration: true, declarationDir: './dist/types/' }),
+      typescript({ declaration: true, declarationDir: "./dist/types/" }),
       commonjs(),
       resolve(),
-      terser(),
+      // terser(),
     ],
   },
-  ...Object.entries(inputs).map(([codec, input]) => ({
-    input,
-    output: [
-      {
-        dir: './dist',
-        format: 'umd',
-        name: codec,
-        entryFileNames: '[name].umd.js',
-        esModule: false,
-      },
-    ],
-    plugins: [typescript(), commonjs(), resolve(), terser()],
-  })),
 ];

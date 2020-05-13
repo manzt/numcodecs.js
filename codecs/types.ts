@@ -2,11 +2,12 @@ export interface EmscriptenModuleOpts {
   noInitialRun?: boolean;
   locateFile?: (url: string) => string;
   onRuntimeInitialized?: () => void;
+  wasmBinary?: Uint8Array;
 }
 
 // Emscripten things
 // Copied from: https://github.com/GoogleChromeLabs/squoosh/blob/65847c0ed76d31a2decd9483ceea11ec69b5e355/emscripten-wasm.d.ts
-type EnvironmentType = 'WEB' | 'NODE' | 'SHELL' | 'WORKER';
+type EnvironmentType = "WEB" | "NODE" | "SHELL" | "WORKER";
 export interface EmscriptenModule {
   print(str: string): void;
   printErr(str: string): void;

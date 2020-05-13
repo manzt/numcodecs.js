@@ -13,15 +13,18 @@
     },
     "./gzip": {
       "browser": "./dist/gzip.js",
-      "umd": "./dist/gzip.umd.js",
       "import": "./dist/gzip.mjs",
       "require": "./dist/gzip.cjs"
     },
     "./zlib": {
       "browser": "./dist/zlib.js",
-      "umd": "./dist/zlib.umd.js",
       "import": "./dist/zlib.mjs",
       "require": "./dist/zlib.cjs"
+    },
+    "./blosc": {
+      "browser": "./dist/blosc.js",
+      "import": "./dist/blosc.mjs",
+      "require": "./dist/blosc.cjs"
     }
   },
   "repository": {
@@ -64,7 +67,7 @@
     "rollup-plugin-terser": "^5.3.0",
     "ts-jest": "^25.4.0",
     "tslib": "^1.11.1",
-    "typescript": "^3.8.3"
+    "typescript": "^3.9.2"
   },
   "prettier": {
     "trailingComma": "all",
