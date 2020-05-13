@@ -1,4 +1,4 @@
-import { EmscriptenModule, EmscriptenModuleOpts } from "../types";
+import { EmscriptenModule, EmscriptenModuleOpts } from '../types';
 
 export enum BloscShuffle {
   NOSHUFFLE = 0,
@@ -10,12 +10,12 @@ export enum BloscShuffle {
 export type BloscCompressionLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
 export type BloscCompressor =
-  | "blosclz"
-  | "lz4"
-  | "lz4hc"
-  | "snappy"
-  | "zlib"
-  | "zstd";
+  | 'blosclz'
+  | 'lz4'
+  | 'lz4hc'
+  | 'snappy'
+  | 'zlib'
+  | 'zstd';
 
 export interface BloscModule extends EmscriptenModule {
   compress(

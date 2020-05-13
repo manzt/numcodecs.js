@@ -1,8 +1,8 @@
-import { Codec, CompressorConfig } from "./types";
-import { initEmscriptenModule } from "./utils";
+import { Codec, CompressorConfig } from './types';
+import { initEmscriptenModule } from './utils';
 // eslint-disable-next-line @typescript-eslint/camelcase
-import blosc_codec, { BloscModule } from "../codecs/blosc/blosc_codec";
-import wasmSrc from "../codecs/blosc/blosc_codec_wasm";
+import blosc_codec, { BloscModule } from '../codecs/blosc/blosc_codec';
+import wasmSrc from '../codecs/blosc/blosc_codec_wasm';
 
 enum BloscShuffle {
   NOSHUFFLE = 0,
@@ -13,13 +13,7 @@ enum BloscShuffle {
 
 type BloscCompressionLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
-type BloscCompressor =
-  | "blosclz"
-  | "lz4"
-  | "lz4hc"
-  | "snappy"
-  | "zlib"
-  | "zstd";
+type BloscCompressor = 'blosclz' | 'lz4' | 'lz4hc' | 'snappy' | 'zlib' | 'zstd';
 
 interface BloscConfig {
   blocksize?: number;
@@ -29,18 +23,18 @@ interface BloscConfig {
 }
 
 const COMPRESSORS = new Set([
-  "blosclz",
-  "lz4",
-  "lz4hc",
-  "snappy",
-  "zlib",
-  "zstd",
+  'blosclz',
+  'lz4',
+  'lz4hc',
+  'snappy',
+  'zlib',
+  'zstd',
 ]);
 
 let emscriptenModule: Promise<BloscModule>;
 
 class Blosc implements Codec {
-  public static codecId = "blosc";
+  public static codecId = 'blosc';
   public static COMPRESSORS = [...COMPRESSORS];
   public static NOSHUFFLE = BloscShuffle.NOSHUFFLE;
   public static SHUFFLE = BloscShuffle.SHUFFLE;
@@ -54,7 +48,7 @@ class Blosc implements Codec {
 
   constructor(
     clevel = 5,
-    cname = "lz4",
+    cname = 'lz4',
     shuffle = BloscShuffle.SHUFFLE,
     blocksize = 0,
   ) {
@@ -86,10 +80,7 @@ class Blosc implements Codec {
 
   async encode(data: Uint8Array): Promise<Uint8Array> {
     if (!emscriptenModule) {
-      emscriptenModule = initEmscriptenModule(
-        blosc_codec,
-        wasmSrc as string,
-      );
+      emscriptenModule = initEmscriptenModule(blosc_codec, wasmSrc as string);
     }
     const module = await emscriptenModule;
     const view = module.compress(
