@@ -40,15 +40,22 @@ echo "Compiling wasm bindings"
 echo "============================================="
 cd ../
 
+# The -s settings which are specific to emcc can be found in detail at
+# https://github.com/emscripten-core/emscripten/blob/master/src/settings.js
+#
+# - MODULARIZE & EXPORT_ES6 flags generated js glue code as a module.
+# - The USE_ES6_IMPORT_META and ENVIRONMENT="webview" are work arounds so that
+#   the bundled conditional exports work in their respective environments.
 (
   emcc blosc_codec.cpp \
-    ${OPTIMIZE} \
+    -Os -flto --llvm-lto 1 \
     --closure 1 \
     --bind \
     -s ALLOW_MEMORY_GROWTH=1 \
     -s MODULARIZE=1 \
     -s EXPORT_ES6=1 \
-    -s ENVIRONMENT="web" \
+    -s USE_ES6_IMPORT_META=0 \
+    -s ENVIRONMENT="webview" \
     -s MALLOC=emmalloc \
     -s EXPORT_NAME="blosc_codec" \
     -x c++ \
