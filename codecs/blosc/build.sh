@@ -49,13 +49,14 @@ cd ../
     -s MODULARIZE=1 \
     -s EXPORT_ES6=1 \
     -s ENVIRONMENT="web" \
+    -s MALLOC=emmalloc \
     -s EXPORT_NAME="blosc_codec" \
     -x c++ \
     --std=c++11 \
     -I c-blosc/blosc \
     -lblosc \
     -L build/blosc \
-    -o blosc_codec.js \
+    -o blosc_codec.js
 )
 
 echo "============================================="
