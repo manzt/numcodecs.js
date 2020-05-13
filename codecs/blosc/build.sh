@@ -4,7 +4,7 @@ set -e
 mkdir build
 cd build
 
-export OPTIMIZE="-Os -flto --llvm-lto 1"
+export OPTIMIZE="-Os -flto"
 export LDFLAGS="${OPTIMIZE}"
 export CFLAGS="${OPTIMIZE}"
 export CPPFLAGS="${OPTIMIZE}"
@@ -44,11 +44,18 @@ cd ../
 # https://github.com/emscripten-core/emscripten/blob/master/src/settings.js
 #
 # - MODULARIZE & EXPORT_ES6 flags generated js glue code as a module.
+#
 # - The USE_ES6_IMPORT_META and ENVIRONMENT="webview" are work arounds so that
 #   the bundled conditional exports work in their respective environments.
+#   The node detection by emscripten does not does not distinguish between
+#   es6 and commonjs (within node), so the "all environments" target actually
+#   breaks if using es6 modules in Node. If it is desired to use this module
+#   outside of numcodecs.js, it is worth exploring which of these options
+#   best suit your needs.
+#
 (
   emcc blosc_codec.cpp \
-    -Os -flto --llvm-lto 1 \
+    ${OPTIMIZE} \
     --closure 1 \
     --bind \
     -s ALLOW_MEMORY_GROWTH=1 \

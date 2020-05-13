@@ -27,7 +27,7 @@ export default [
     ],
     plugins: [
       typescript({ declaration: true, declarationDir: './dist/types/' }),
-      commonjs(),
+      commonjs({ exclude: './codecs/**/*' }),
       resolve(),
     ],
   },
