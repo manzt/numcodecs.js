@@ -1,8 +1,9 @@
 {
   "compilerOptions": {
     "target": "esnext",
-    "module": "esnext",
+    "module": "ESNext",
     "strict": true,
+    "allowJs": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
     "noImplicitAny": true,
@@ -15,7 +16,8 @@
     "noEmitOnError": false,
     "baseUrl": ".",
     "esModuleInterop": true,
-    "rootDir": "."
+    "rootDir": ".",
+    "noEmit": true
   },
   "includes": ["src/**/*", "codecs/**/*"],
   "exclude": ["dist", "node_modules", "test/**/*.ts"]
