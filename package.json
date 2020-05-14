@@ -1,7 +1,7 @@
 {
   "name": "numcodecs",
   "author": "Trevor James Manz",
-  "version": "0.0.13",
+  "version": "0.0.14",
   "description": "Buffer compression and transformation codecs for use in data storage and communication applications.",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
