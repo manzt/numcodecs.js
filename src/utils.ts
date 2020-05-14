@@ -1,10 +1,12 @@
-import { EmscriptenModule, EmscriptenModuleOpts } from "../codecs/types";
+import { EmscriptenModule, EmscriptenModuleOpts } from '../codecs/types';
 
 function base64ToBytes(src: string): Uint8Array {
-  const isNode = typeof process !== "undefined" && process.versions != null &&
+  const isNode =
+    typeof process !== 'undefined' &&
+    process.versions != null &&
     process.versions.node != null;
   if (isNode) {
-    return Buffer.from(src, "base64");
+    return Buffer.from(src, 'base64');
   }
   const raw = globalThis.atob(src);
   const len = raw.length;
