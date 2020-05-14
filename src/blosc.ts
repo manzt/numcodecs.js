@@ -15,13 +15,6 @@ type BloscCompressionLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
 type BloscCompressor = 'blosclz' | 'lz4' | 'lz4hc' | 'snappy' | 'zlib' | 'zstd';
 
-interface BloscConfig {
-  blocksize?: number;
-  clevel?: number;
-  cname?: string;
-  shuffle?: BloscShuffle;
-}
-
 const COMPRESSORS = new Set([
   'blosclz',
   'lz4',
@@ -63,6 +56,12 @@ class Blosc implements Codec {
         'blosclz', 'lz4', 'lz4hc','snappy', 'zlib', 'zstd'.`,
       );
     }
+    if (shuffle < -1 || shuffle > 2) {
+      throw new Error(
+        `Invalid shuffle ${shuffle}. Must be one of 0 (NOSHUFFLE),
+        1 (SHUFFLE), 2 (BITSHUFFLE), -1 (AUTOSHUFFLE).`,
+      );
+    }
     this.blocksize = blocksize;
     this.clevel = clevel as BloscCompressionLevel;
     this.cname = cname as BloscCompressor;
@@ -74,7 +73,12 @@ class Blosc implements Codec {
     clevel,
     cname,
     shuffle,
-  }: BloscConfig & CompressorConfig): Blosc {
+  }: {
+    blocksize?: number;
+    clevel?: number;
+    cname?: string;
+    shuffle?: BloscShuffle;
+  } & CompressorConfig): Blosc {
     return new Blosc(clevel, cname, shuffle, blocksize);
   }
 
@@ -84,7 +88,7 @@ class Blosc implements Codec {
     }
     const module = await emscriptenModule;
     const view = module.compress(
-      data.buffer,
+      data,
       this.cname,
       this.clevel,
       this.shuffle,
@@ -100,7 +104,7 @@ class Blosc implements Codec {
       emscriptenModule = initEmscriptenModule(blosc_codec, wasmSrc as string);
     }
     const module = await emscriptenModule;
-    const view = module.decompress(data.buffer);
+    const view = module.decompress(data);
     const result = new Uint8Array(view); // Copy view and free wasm memory
     module.free_result();
     if (out !== undefined) {
