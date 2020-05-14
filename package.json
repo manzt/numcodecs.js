@@ -78,7 +78,10 @@
     "preset": "ts-jest",
     "collectCoverageFrom": [
       "src/**/{!(types|errors|index),}.ts"
-    ]
+    ],
+    "transform": {
+      "\\.(ts|js)$": "ts-jest"
+    }
   },
   "dependencies": {
     "pako": "^1.0.11"
