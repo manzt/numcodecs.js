@@ -4,25 +4,21 @@
   "version": "0.0.13",
   "description": "Buffer compression and transformation codecs for use in data storage and communication applications.",
   "main": "dist/index.cjs",
-  "module": "dist/index.js",
+  "module": "dist/index.mjs",
   "exports": {
     ".": {
-      "browser": "./dist/index.js",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
     "./gzip": {
-      "browser": "./dist/gzip.js",
       "import": "./dist/gzip.mjs",
       "require": "./dist/gzip.cjs"
     },
     "./zlib": {
-      "browser": "./dist/zlib.js",
       "import": "./dist/zlib.mjs",
       "require": "./dist/zlib.cjs"
     },
     "./blosc": {
-      "browser": "./dist/blosc.js",
       "import": "./dist/blosc.mjs",
       "require": "./dist/blosc.cjs"
     }

@@ -9,7 +9,6 @@ export default [
   {
     input: { index: './src/index.ts', ...inputs },
     output: [
-      { dir: './dist', format: 'es', sourcemap: true },
       {
         dir: './dist',
         format: 'cjs',
