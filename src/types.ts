@@ -9,5 +9,4 @@ export abstract class Codec {
 
 export interface CompressorConfig {
   id: string;
-  level?: number;
 }

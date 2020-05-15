@@ -3,6 +3,7 @@
   "author": "Trevor James Manz",
   "version": "0.0.14",
   "description": "Buffer compression and transformation codecs for use in data storage and communication applications.",
+  "types": "dist/types/src/index.d.ts",
   "main": "dist/index.cjs",
   "module": "dist/index.mjs",
   "exports": {

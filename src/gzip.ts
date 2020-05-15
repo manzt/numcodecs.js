@@ -16,7 +16,7 @@ class GZip implements Codec {
     this.level = level as ValidGZipLevelSetting;
   }
 
-  static fromConfig({ level }: CompressorConfig): GZip {
+  static fromConfig({ level }: { level: number } & CompressorConfig): GZip {
     return new GZip(level);
   }
 
