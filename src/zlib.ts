@@ -16,7 +16,7 @@ class Zlib implements Codec {
     this.level = level as ValidZlibLevelSetting;
   }
 
-  static fromConfig({ level }: CompressorConfig): Zlib {
+  static fromConfig({ level }: { level: number } & CompressorConfig): Zlib {
     return new Zlib(level);
   }
 

@@ -1,27 +1,27 @@
 {
   "name": "numcodecs",
   "author": "Trevor James Manz",
-  "version": "0.0.13",
+  "version": "0.0.15",
   "description": "Buffer compression and transformation codecs for use in data storage and communication applications.",
+  "types": "dist/types/src/index.d.ts",
   "main": "dist/index.cjs",
-  "module": "dist/index.js",
+  "module": "dist/index.mjs",
   "exports": {
     ".": {
-      "browser": "./dist/index.js",
       "import": "./dist/index.mjs",
       "require": "./dist/index.cjs"
     },
     "./gzip": {
-      "browser": "./dist/gzip.js",
-      "umd": "./dist/gzip.umd.js",
       "import": "./dist/gzip.mjs",
       "require": "./dist/gzip.cjs"
     },
     "./zlib": {
-      "browser": "./dist/zlib.js",
-      "umd": "./dist/zlib.umd.js",
       "import": "./dist/zlib.mjs",
       "require": "./dist/zlib.cjs"
+    },
+    "./blosc": {
+      "import": "./dist/blosc.mjs",
+      "require": "./dist/blosc.cjs"
     }
   },
   "repository": {
@@ -64,7 +64,7 @@
     "rollup-plugin-terser": "^5.3.0",
     "ts-jest": "^25.4.0",
     "tslib": "^1.11.1",
-    "typescript": "^3.8.3"
+    "typescript": "^3.9.2"
   },
   "prettier": {
     "trailingComma": "all",
@@ -75,7 +75,10 @@
     "preset": "ts-jest",
     "collectCoverageFrom": [
       "src/**/{!(types|errors|index),}.ts"
-    ]
+    ],
+    "transform": {
+      "\\.(ts|js)$": "ts-jest"
+    }
   },
   "dependencies": {
     "pako": "^1.0.11"

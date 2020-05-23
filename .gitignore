@@ -17,3 +17,7 @@ node_modules/
 
 # distribution dir
 dist/
+
+
+# ignore codec builds
+codecs/**/build/
