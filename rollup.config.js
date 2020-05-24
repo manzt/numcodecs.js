@@ -14,14 +14,12 @@ export default [
         format: 'cjs',
         entryFileNames: '[name].cjs',
         chunkFileNames: '[name]-[hash].cjs',
-        sourcemap: true,
       },
       {
         dir: './dist',
         format: 'es',
         entryFileNames: '[name].mjs',
         chunkFileNames: '[name]-[hash].mjs',
-        sourcemap: true,
       },
     ],
     plugins: [
