@@ -1,4 +1,7 @@
 # numcodecs.js
+[![Actions Status](https://github.com/manzt/numcodecs.js/workflows/Tests/badge.svg)](https://github.com/manzt/numcodecs.js/actions)
+![Top Language Badge](https://img.shields.io/github/languages/top/manzt/numcodecs.js)
+[![NPM badge](https://img.shields.io/npm/v/numcodecs)](https://www.npmjs.com/package/numcodecs)
 
 Buffer compression and transformation codecs for use in [Zarr.js](https://github.com/gzuidhof/zarr.js/) and beyond...
 
