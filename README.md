@@ -41,12 +41,12 @@ This project is intended as a Typescript implementation of the buffer compressio
 
 ### Conditional exports
 
-Each compressor is bundled as a separate entrypoint and exported as a package submodule using Node's [conditional exports](https://nodejs.org/api/modules.html). This means that compressors can be imported as independent modules. We hope this will afford an option to have a more dynamic and configurable compressor registry in Zarr.js in the future.
+Each compressor is bundled as a separate entrypoint and exported as a package submodule using Node's [conditional exports](https://nodejs.org/api/modules.html). This mean each compressor can be imported independently from code-split modules. I hope this will afford an option to have a more dynamic and configurable compressor registry in Zarr.js in the future, allowing users to define the codecs necessary for their applications.
 
 ```javascript
 // index.js
 const Zlib = require('numcodecs/zlib');
 
 // index.mjs
-import { Zlib } from 'numcodecs/zlib';
+import Zlib from 'numcodecs/zlib';
 ```
