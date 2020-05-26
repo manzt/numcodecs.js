@@ -32,7 +32,7 @@ const encoded = await codec.encode(bytes);
 console.log(encoded);
 // Uint8Array(3744) [2, 1, 33, 4, 128, 26, 6, 0, 0, 0, 4, 0, ... ]
 
-const decoded = await coded.decode(encoded);
+const decoded = await codec.decode(encoded);
 console.log(new Uint32Array(decoded.buffer));
 // Uint32Array(100000) [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,  ... ]
 ```
