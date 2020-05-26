@@ -1,30 +1,55 @@
-# numcodecs
+# numcodecs.js
+[![Actions Status](https://github.com/manzt/numcodecs.js/workflows/tests/badge.svg)](https://github.com/manzt/numcodecs.js/actions)
+![Top Language Badge](https://img.shields.io/github/languages/top/manzt/numcodecs.js)
+[![NPM badge](https://img.shields.io/npm/v/numcodecs)](https://www.npmjs.com/package/numcodecs)
 
+Buffer compression and transformation codecs for use in [Zarr.js](https://github.com/gzuidhof/zarr.js/) and beyond...
 
-Examples:
+### Installation
 
-Some experiments with Node.js 14.1 [package exports](https://nodejs.org/api/modules.html).
+```bash
+npm install numcodecs
+```
+
+### Usage
+
 ```javascript
-// Rollup & webpack don't have great support for exports so the easiest
-// way to import from the main (since the lib is completely tree shakeable)
-import { GZip } from 'numcodecs';
+import { Blosc } from 'numcodecs';
 
-// Node 14 conditional exports
+const codec = new Blosc();
+
+const size = 100000;
+const arr = new Uint32Array(size);
+for (let i = 0; i < size; i++) {
+  arr[i] = i;
+}
+
+const bytes = new Uint8Array(arr.buffer);
+console.log(bytes);
+// Uint8Array(400000) [0, 0, 0, 0,  1, 0, 0, 0,  2, 0, 0, 0, ... ]
+
+const encoded = await codec.encode(bytes);
+console.log(encoded);
+// Uint8Array(3744) [2, 1, 33, 4, 128, 26, 6, 0, 0, 0, 4, 0, ... ]
+
+const decoded = await coded.decode(encoded);
+console.log(new Uint32Array(decoded.buffer));
+// Uint32Array(100000) [ 0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10,  ... ]
+```
+
+### Author's note
+
+This project is intended as a Typescript implementation of the buffer compression library [`numcodecs`](https://github.com/zarr-developers/numcodecs) which supports [`zarr-python`](https://github.com/zarr-developers/zarr-python). Currently only `blosc`, `zlib`, and `gzip` compressors are supported. No other compressors are implemented, but contributions are welcome!
+
+
+### Conditional exports
+
+Each compressor is bundled as a separate entrypoint and exported as a package submodule using Node's [conditional exports](https://nodejs.org/api/modules.html). This mean each compressor can be imported independently from code-split modules. I hope this will afford an option to have a more dynamic and configurable compressor registry in Zarr.js in the future, allowing users to define the codecs necessary for their applications.
+
+```javascript
+// index.js
+const Zlib = require('numcodecs/zlib');
 
 // index.mjs
-import { GZip } from 'numcodecs';
-import GZip from 'numcodecs/gzip';
-
-// index.js
-const GZip = require('numcodecs').GZip;
-const GZip = require('numcodecs/gzip');
-
-const codec = GZip.fromConfig({ level: 1 }); // or new GZip(1);
-
-// Usage
-const arr = new Float32Array([1, 2, 3, 4, 5, 6]);
-const encoded = codec.encode(new Uint8Array(arr.buffer));
-const decoded = coded.decode(encoded);
-console.log(new Float32Array(decoded.buffer));
-// Float32Array(6) [ 1, 2, 3, 4, 5, 6 ]
+import Zlib from 'numcodecs/zlib';
 ```
