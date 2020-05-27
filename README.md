@@ -16,7 +16,7 @@ npm install numcodecs
 ```javascript
 import { Blosc } from 'numcodecs';
 
-const codec = new Blosc();
+const codec = new Blosc(); // or Blosc.fromConfig({ clevel: 5, cname: 'lz4', shuffle: Blosc.SHUFFLE, blocksize: 0 });
 
 const size = 100000;
 const arr = new Uint32Array(size);
@@ -44,7 +44,7 @@ This project is intended as a Typescript implementation of the buffer compressio
 
 ### Conditional exports
 
-Each compressor is bundled as a separate entrypoint and exported as a package submodule using Node's [conditional exports](https://nodejs.org/api/modules.html). This mean each compressor can be imported independently from code-split modules. I hope this will afford an option to have a more dynamic and configurable compressor registry in Zarr.js in the future, allowing users to define the codecs necessary for their applications.
+Each compressor is bundled as a separate entrypoint and exported as a package submodule using Node's [conditional exports](https://nodejs.org/api/modules.html). This means each compressor can be imported independently from code-split modules. I hope this will afford an option to have a more dynamic and configurable compressor registry in Zarr.js in the future, allowing users to define the codecs necessary for their applications.
 
 ```javascript
 // index.js
