@@ -24,6 +24,7 @@
       "require": "./dist/blosc.cjs"
     }
   },
+  "sideEffects": false,
   "repository": {
     "type": "git",
     "url": "https://github.com/manzt/numcodecs.js.git"
