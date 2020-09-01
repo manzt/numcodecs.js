@@ -54,14 +54,16 @@ echo "============================================="
 mkdir $BUILD_DIR
 cd $BUILD_DIR
 
-emcmake cmake \
+(
+  emcmake cmake \
     -DCMAKE_BUILD_TYPE=Release \
-		-DBUILD_BENCHMARKS=0 \
-		-DBUILD_SHARED=0 \
-		-DBUILD_TESTS=0 \
-		-DDEACTIVATE_AVX2=1 \
-	  -DDEACTIVATE_SSE2=1 \
+    -DBUILD_BENCHMARKS=0 \
+    -DBUILD_SHARED=0 \
+    -DBUILD_TESTS=0 \
+    -DDEACTIVATE_AVX2=1 \
+    -DDEACTIVATE_SSE2=1 \
     ../
+)
 
 cmake --build .
 
