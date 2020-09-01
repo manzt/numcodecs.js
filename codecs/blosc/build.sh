@@ -1,13 +1,31 @@
 #!/usr/bin/env bash
 
 set -e
-mkdir build
-cd build
+
+ROOT_DIR=node_modules
+rm -rf $ROOT_DIR
+
+CODEC_URL="https://github.com/Blosc/c-blosc"
+CODEC_VERSION="v1.18.1"
+
+BLOSC_DIR=$ROOT_DIR/c-blosc
+BUILD_DIR=$BLOSC_DIR/build
 
 export OPTIMIZE="-Os -flto"
 export LDFLAGS="${OPTIMIZE}"
 export CFLAGS="${OPTIMIZE}"
 export CPPFLAGS="${OPTIMIZE}"
+
+echo "============================================="
+echo "Downloading c-blosc"
+echo "============================================="
+
+mkdir -p $BLOSC_DIR
+curl -L $CODEC_URL/archive/$CODEC_VERSION.tar.gz | tar -xzf - --strip 1 -C $BLOSC_DIR
+# Add missing headers in vendored zlib.
+for file in "gzlib.c" "gzread.c" "gzwrite.c"; do \
+  sed -i '1s/^/#include <unistd.h>/' $BLOSC_DIR/internal-complibs/zlib-1.2.8/$file ; \
+done
 
 echo "============================================="
 echo "Compiling blosc"
@@ -32,14 +50,26 @@ echo "============================================="
 #
 # Perhaps there is a way to use emscriptens zlib, but this works for now.
 #
-emcmake cmake ../c-blosc
+
+mkdir $BUILD_DIR
+cd $BUILD_DIR
+
+emcmake cmake \
+    -DCMAKE_BUILD_TYPE=Release \
+		-DBUILD_BENCHMARKS=0 \
+		-DBUILD_SHARED=0 \
+		-DBUILD_TESTS=0 \
+		-DDEACTIVATE_AVX2=1 \
+	  -DDEACTIVATE_SSE2=1 \
+    ../
+
 cmake --build .
 
 echo "============================================="
 echo "Compiling wasm bindings"
 echo "============================================="
-cd ../
 
+cd ../../../
 # The -s settings which are specific to emcc can be found in detail at
 # https://github.com/emscripten-core/emscripten/blob/master/src/settings.js
 #
@@ -67,9 +97,9 @@ cd ../
     -s EXPORT_NAME="blosc_codec" \
     -x c++ \
     --std=c++11 \
-    -I c-blosc/blosc \
+    -I $BLOSC_DIR/blosc \
     -lblosc \
-    -L build/blosc \
+    -L $BLOSC_DIR/build/blosc \
     -o blosc_codec.js
 )
 
