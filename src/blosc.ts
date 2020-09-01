@@ -1,6 +1,5 @@
 import { Codec, CompressorConfig } from './types';
 import { initEmscriptenModule } from './utils';
-// eslint-disable-next-line @typescript-eslint/camelcase
 import blosc_codec, { BloscModule } from '../codecs/blosc/blosc_codec';
 import wasmSrc from '../codecs/blosc/blosc_codec_wasm';
 
