@@ -1,29 +1,29 @@
 #!/usr/bin/env bash
 set -e
 
-ROOT_DIR=node_modules
+ROOT_DIR="node_modules"
 rm -rf $ROOT_DIR
 
 CODEC_URL="https://github.com/Blosc/c-blosc"
 CODEC_VERSION="v1.18.1"
 
-BLOSC_DIR=$ROOT_DIR/c-blosc
-BUILD_DIR=$BLOSC_DIR/build
+BLOSC_DIR="$ROOT_DIR/c-blosc"
+BUILD_DIR="$BLOSC_DIR/build"
 
 export OPTIMIZE="-Os -flto"
-export LDFLAGS="${OPTIMIZE}"
-export CFLAGS="${OPTIMIZE}"
-export CPPFLAGS="${OPTIMIZE}"
+export LDFLAGS=$OPTIMIZE
+export CFLAGS=$OPTIMIZE
+export CPPFLAGS=$OPTIMIZE
 
 echo "============================================="
 echo "Downloading c-blosc"
 echo "============================================="
 
 mkdir -p $BLOSC_DIR
-curl -L $CODEC_URL/archive/$CODEC_VERSION.tar.gz | tar -xzf - --strip 1 -C $BLOSC_DIR
+curl -L "$CODEC_URL/archive/$CODEC_VERSION.tar.gz" | tar -xzf - --strip 1 -C $BLOSC_DIR
 # Add missing headers in vendored zlib.
 for file in "gzlib.c" "gzread.c" "gzwrite.c"; do \
-  sed -i '1s/^/#include <unistd.h>/' $BLOSC_DIR/internal-complibs/zlib-1.2.8/$file ; \
+  sed -i "1s/^/#include <unistd.h>/" "$BLOSC_DIR/internal-complibs/zlib-1.2.8/$file" ; \
 done
 
 echo "============================================="
@@ -78,10 +78,10 @@ cd ../../../
     -s EXPORT_NAME="blosc_codec" \
     -x c++ \
     --std=c++17 \
-    -I $BLOSC_DIR/blosc \
+    -I "$BLOSC_DIR/blosc" \
     -lblosc \
-    -L $BLOSC_DIR/build/blosc \
-    -o blosc_codec.js
+    -L "$BLOSC_DIR/build/blosc" \
+    -o "blosc_codec.js"
 )
 
 echo "============================================="
