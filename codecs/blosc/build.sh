@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 set -e
 
 ROOT_DIR=node_modules
@@ -30,30 +29,10 @@ done
 echo "============================================="
 echo "Compiling blosc"
 echo "============================================="
-# @trevor: As a note to future self and others, we use this forked c-blosc
-# because I wasn't sure how to compile blosc with a wasm-compatible
-# configuration otherwise.
-#
-# Changes:
-#
-# -./CMakeList.txt:
-#   - BUILD_BENCHMARKS OFF
-#   - BUILD_SHARED     OFF
-#   - BUILD_TESTS      OFF
-#   - DEACTIVATE_AVX2   ON
-#   - DEACTIVATE_SSE2   ON -- AVX2 and SSE2 are not supported in WebAssembly
-#
-# - Add  '#include <unistd.h>' headers to ./internal-complibs/zlib-1.2.8/*:
-#   - ./gzlib.c
-#   - ./gzread.c
-#   - ./gwrite.c
-#
-# Perhaps there is a way to use emscriptens zlib, but this works for now.
-#
 
 mkdir $BUILD_DIR
 cd $BUILD_DIR
-
+# AVX2 and SSE2 are not supported in WebAssembly
 (
   emcmake cmake \
     -DCMAKE_BUILD_TYPE=Release \
@@ -98,7 +77,7 @@ cd ../../../
     -s MALLOC=emmalloc \
     -s EXPORT_NAME="blosc_codec" \
     -x c++ \
-    --std=c++11 \
+    --std=c++17 \
     -I $BLOSC_DIR/blosc \
     -lblosc \
     -L $BLOSC_DIR/build/blosc \
