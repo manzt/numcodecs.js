@@ -1,0 +1,3 @@
+codecs/blosc/*.js linguist-generated
+codecs/blosc/*.ts linguist-generated
+codecs/blosc/*.wasm linguist-generated
