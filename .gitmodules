@@ -1,3 +1,0 @@
-[submodule "codecs/blosc/c-blosc"]
-	path = codecs/blosc/c-blosc
-	url = https://github.com/manzt/c-blosc.git

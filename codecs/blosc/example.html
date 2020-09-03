@@ -8,43 +8,40 @@
   <body>
     <script type="module">
       import blosc_codec from './blosc_codec.js';
-      (async () => {
-        const Module = blosc_codec();
-        Module.onRuntimeInitialized = async (_) => {
-          const size = 100000;
-          const arr = new Uint32Array(size);
-          for (let i = 0; i < size; i++) {
-            arr[i] = i;
-          }
+      blosc_codec().then(async module => {
+        const size = 100000;
+        const arr = new Uint32Array(size);
+        for (let i = 0; i < size; i++) {
+          arr[i] = i;
+        }
 
-          console.log('Original:', arr);
+        console.log('Original:', arr);
 
-          const bytes = new Uint8Array(arr.buffer);
-          console.log('Bytes:', bytes);
+        const bytes = new Uint8Array(arr.buffer);
+        console.log('Bytes:', bytes);
 
-          console.log(`Compressing decoded chunk...`);
-          const cname = 'lz4';
-          const clevel = 5;
-          const shuffle = 1;
-          const blocksize = 0;
-          const compressed = Module.compress(
-            bytes,
-            'lz4',
-            clevel,
-            shuffle,
-            blocksize,
-          );
+        console.log(`Compressing decoded chunk...`);
+        const cname = 'lz4';
+        const clevel = 5;
+        const shuffle = 1;
+        const blocksize = 0;
+        const compressed = module.compress(
+          bytes,
+          'lz4',
+          clevel,
+          shuffle,
+          blocksize,
+        );
 
-          Module.free_result();
-          console.log(compressed);
+        module.free_result();
+        console.log(compressed);
 
-          console.log('Decompressing chunk...');
-          const dBuffer = Module.decompress(compressed);
-          const decompressed = new Uint8Array(dBuffer);
-          Module.free_result();
-          console.log(new Uint32Array(decompressed.buffer));
-        };
-      })();
+        console.log('Decompressing chunk...');
+        const dBuffer = module.decompress(compressed);
+        const decompressed = new Uint8Array(dBuffer);
+        module.free_result();
+        console.log(new Uint32Array(decompressed.buffer));
+      });
     </script>
   </body>
 </html>
