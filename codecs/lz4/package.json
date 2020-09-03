@@ -1,0 +1,6 @@
+{
+  "name": "lz4",
+  "scripts": {
+    "build": "docker run --rm -v $(pwd):/src emscripten/emsdk:1.40.0 ./build.sh"
+  }
+}
