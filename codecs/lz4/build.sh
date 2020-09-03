@@ -2,7 +2,7 @@
 set -e
 
 ROOT_DIR="node_modules"
-# rm -rf $ROOT_DIR
+rm -rf $ROOT_DIR
 
 CODEC_URL="https://github.com/lz4/lz4"
 CODEC_VERSION="v1.9.2"
@@ -14,25 +14,25 @@ export LDFLAGS=$OPTIMIZE
 export CFLAGS=$OPTIMIZE
 export CPPFLAGS=$OPTIMIZE
 
-# echo "============================================="
-# echo "Downloading lz4"
-# echo "============================================="
-#
-# mkdir -p $CODEC_DIR
-# curl -L "$CODEC_URL/archive/$CODEC_VERSION.tar.gz" | tar -xzf - --strip 1 -C $CODEC_DIR
-#
-# echo "============================================="
-# echo "Compiling lz4"
-# echo "============================================="
-#
-# cd $CODEC_DIR
-# emmake make
-#
-# echo "============================================="
-# echo "Compiling wasm bindings"
-# echo "============================================="
-#
-# cd ../../
+echo "============================================="
+echo "Downloading lz4"
+echo "============================================="
+
+mkdir -p $CODEC_DIR
+curl -L "$CODEC_URL/archive/$CODEC_VERSION.tar.gz" | tar -xzf - --strip 1 -C $CODEC_DIR
+
+echo "============================================="
+echo "Compiling lz4"
+echo "============================================="
+
+cd $CODEC_DIR
+emmake make
+
+echo "============================================="
+echo "Compiling wasm bindings"
+echo "============================================="
+
+cd ../../
 (
   emcc lz4_codec.cpp \
     ${OPTIMIZE} \
