@@ -1,7 +1,13 @@
 import LZ4 from '../src/lz4';
 import { range, linspace, product, checkAsyncEncodeDecode } from './common';
 
-const codecConfigs = Array({ length: 1 }).map((_, i) => ({ acceleration: i }));
+const codecConfigs = [
+  { acceleration: -1 },
+  { acceleration: 0 },
+  { acceleration: 1 },
+  { acceleration: 10 },
+  { acceleration: 1000000 },
+];
 
 const arrays = [
   range(1000, '<u4'),
@@ -27,7 +33,7 @@ test('Invalid compressor options', () => {
 });
 
 test('Static constructor', async () => {
-  const config = { id: 'lz4', acceleration: 3 };
+  const config = { id: 'lz4' };
   const codec = LZ4.fromConfig(config);
   const encAndDec = await checkAsyncEncodeDecode(codec, arrays[0]);
   expect(arrays[0]).toEqual(encAndDec);

@@ -11,7 +11,8 @@ let emscriptenModule: Promise<LZ4Module>;
 class LZ4 implements Codec {
   public static codecId = 'lz4';
   public static DEFAULT_ACCELERATION = DEFAULT_ACCELERATION;
-  public static MAX_BUFFER_SIZE = MAX_BUFFER_SIZE;
+  public static max_buffer_size = MAX_BUFFER_SIZE;
+  public max_buffer_size = MAX_BUFFER_SIZE;
   public acceleration: number;
 
   constructor(acceleration = DEFAULT_ACCELERATION) {
