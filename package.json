@@ -22,6 +22,10 @@
     "./blosc": {
       "import": "./dist/blosc.mjs",
       "require": "./dist/blosc.cjs"
+    },
+    "./lz4": {
+      "import": "./dist/lz4.mjs",
+      "require": "./dist/lz4.cjs"
     }
   },
   "sideEffects": false,
