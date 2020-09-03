@@ -8,8 +8,7 @@
   <body>
     <script type="module">
       import blosc_codec from './blosc_codec.js';
-      (async () => {
-        const Module = await blosc_codec();
+      blosc_codec().then(async module => {
         const size = 100000;
         const arr = new Uint32Array(size);
         for (let i = 0; i < size; i++) {
@@ -26,7 +25,7 @@
         const clevel = 5;
         const shuffle = 1;
         const blocksize = 0;
-        const compressed = Module.compress(
+        const compressed = module.compress(
           bytes,
           'lz4',
           clevel,
@@ -34,15 +33,15 @@
           blocksize,
         );
 
-        Module.free_result();
+        module.free_result();
         console.log(compressed);
 
         console.log('Decompressing chunk...');
-        const dBuffer = Module.decompress(compressed);
+        const dBuffer = module.decompress(compressed);
         const decompressed = new Uint8Array(dBuffer);
-        Module.free_result();
+        module.free_result();
         console.log(new Uint32Array(decompressed.buffer));
-      })();
+      });
     </script>
   </body>
 </html>
