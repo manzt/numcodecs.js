@@ -9,9 +9,7 @@ class Zlib implements Codec {
 
   constructor(level = 1) {
     if (level < -1 || level > 9) {
-      throw new Error(
-        'Invalid zlib compression level, it should be between -1 and 9',
-      );
+      throw new Error('Invalid zlib compression level, it should be between -1 and 9');
     }
     this.level = level as ValidZlibLevelSetting;
   }

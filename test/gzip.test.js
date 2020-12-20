@@ -1,6 +1,7 @@
-import GZip from '../src/gzip';
+import { test } from 'zora';
 
-import { range, linspace, product, checkEncodeDecode } from './common';
+import { GZip } from '../dist/index.mjs';
+import { range, linspace, product, checkEncodeDecode } from './common.js';
 
 const codecs = [new GZip(), new GZip(2), new GZip(0), new GZip(5), new GZip(9)];
 
@@ -11,14 +12,14 @@ const arrays = [
   range(323332, '<i2'),
 ];
 
-test('Ensure all equal', () => {
+test('Ensure all equal', t => {
   for (const [codec, arr] of product(codecs, arrays)) {
     const encAndDec = checkEncodeDecode(codec, arr);
-    expect(arr).toEqual(encAndDec);
+    t.equal(arr, encAndDec);
   }
 });
 
-test('Throws with invalid compression level', () => {
-  expect(() => new GZip(-2)).toThrow();
-  expect(() => new GZip(10)).toThrow();
+test('Throws with invalid compression level', t => {
+  t.throws(() => new GZip(-2));
+  t.throws(() => new GZip(10));
 });

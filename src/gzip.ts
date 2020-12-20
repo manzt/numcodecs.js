@@ -9,9 +9,7 @@ class GZip implements Codec {
 
   constructor(level = 1) {
     if (level < 0 || level > 9) {
-      throw new Error(
-        'Invalid gzip compression level, it should be between 0 and 9',
-      );
+      throw new Error('Invalid gzip compression level, it should be between 0 and 9');
     }
     this.level = level as ValidGZipLevelSetting;
   }

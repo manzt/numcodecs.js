@@ -1,10 +1,7 @@
 import { EmscriptenModule, EmscriptenModuleOpts } from '../codecs/types';
 
 function base64ToBytes(src: string): Uint8Array {
-  const isNode =
-    typeof process !== 'undefined' &&
-    process.versions != null &&
-    process.versions.node != null;
+  const isNode = typeof process !== 'undefined' && process.versions != null && process.versions.node != null;
   if (isNode) {
     return Buffer.from(src, 'base64');
   }
@@ -18,13 +15,11 @@ function base64ToBytes(src: string): Uint8Array {
 }
 
 // Adapted from https://github.com/GoogleChromeLabs/squoosh/blob/master/src/codecs/util.ts
-export type ModuleFactory<M extends EmscriptenModule> = (
-  opts: EmscriptenModuleOpts,
-) => Promise<M>;
+export type ModuleFactory<M extends EmscriptenModule> = (opts: EmscriptenModuleOpts) => Promise<M>;
 
 export function initEmscriptenModule<M extends EmscriptenModule>(
   moduleFactory: ModuleFactory<M>,
-  src: string,
+  src: string
 ): Promise<M> {
   const wasmBinary = base64ToBytes(src);
   return moduleFactory({ noInitialRun: true, wasmBinary });
