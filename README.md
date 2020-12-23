@@ -14,9 +14,10 @@ npm install numcodecs
 ### Usage
 
 ```javascript
-import { Blosc } from 'numcodecs';
+import { Blosc, GZip, Zlib, LZ4, Zstd } from 'numcodecs';
 
-const codec = new Blosc(); // or Blosc.fromConfig({ clevel: 5, cname: 'lz4', shuffle: Blosc.SHUFFLE, blocksize: 0 });
+const codec = new Blosc(); 
+// or Blosc.fromConfig({ clevel: 5, cname: 'lz4', shuffle: Blosc.SHUFFLE, blocksize: 0 });
 
 const size = 100000;
 const arr = new Uint32Array(size);
@@ -39,7 +40,10 @@ console.log(new Uint32Array(decoded.buffer));
 
 ### Author's note
 
-This project is intended as a Typescript implementation of the buffer compression library [`numcodecs`](https://github.com/zarr-developers/numcodecs) which supports [`zarr-python`](https://github.com/zarr-developers/zarr-python). Currently only `blosc`, `zlib`, and `gzip` compressors are supported. No other compressors are implemented, but contributions are welcome!
+This project is intended as a Typescript implementation of the buffer compression library [`numcodecs`](https://github.com/zarr-developers/numcodecs) which supports 
+[`zarr-python`](https://github.com/zarr-developers/zarr-python). Currently `blosc`, 
+`zlib`, `gzip`, `lz4`, and `zstd` compressors are supported. No other compressors are 
+implemented, but contributions are welcome!
 
 
 ### Conditional exports
