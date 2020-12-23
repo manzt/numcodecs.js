@@ -10,4 +10,4 @@ export interface LZ4Module extends EmscriptenModule {
   free_result(): void;
 }
 
-export default function (opts: EmscriptenModuleOpts): LZ4Module;
+export default function (opts: EmscriptenModuleOpts): Promise<LZ4Module>;

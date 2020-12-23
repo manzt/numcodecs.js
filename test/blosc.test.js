@@ -30,14 +30,7 @@ const arrays = [
 test('Ensure all equal', async t => {
   const codec = new Blosc();
   for (const [config, arr] of product(codecConfigs, arrays)) {
-    const { cname, clevel, shuffle, blocksize } = config;
-    // Rather than reloading all the webassembly,
-    // just reuse the loaded emscripten module and update the properties
-    if (cname) codec.cname = cname;
-    if (clevel) codec.clevel = clevel;
-    if (shuffle) codec.shuffle = shuffle;
-    if (blocksize) codec.blocksize = blocksize;
-
+    const codec = Blosc.fromConfig(config);
     const encAndDec = await checkAsyncEncodeDecode(codec, arr);
     t.equal(arr, encAndDec);
   }
