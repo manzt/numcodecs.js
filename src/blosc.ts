@@ -14,14 +14,7 @@ type BloscCompressionLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
 type BloscCompressor = 'blosclz' | 'lz4' | 'lz4hc' | 'snappy' | 'zlib' | 'zstd';
 
-const COMPRESSORS = new Set([
-  'blosclz',
-  'lz4',
-  'lz4hc',
-  'snappy',
-  'zlib',
-  'zstd',
-]);
+const COMPRESSORS = new Set(['blosclz', 'lz4', 'lz4hc', 'snappy', 'zlib', 'zstd']);
 
 let emscriptenModule: Promise<BloscModule>;
 
@@ -38,27 +31,20 @@ class Blosc implements Codec {
   public shuffle: BloscShuffle;
   public blocksize: number;
 
-  constructor(
-    clevel = 5,
-    cname = 'lz4',
-    shuffle = BloscShuffle.SHUFFLE,
-    blocksize = 0,
-  ) {
+  constructor(clevel = 5, cname = 'lz4', shuffle = BloscShuffle.SHUFFLE, blocksize = 0) {
     if (clevel < 0 || clevel > 9) {
-      throw new Error(
-        `Invalid compression level: '${clevel}'. It should be between 0 and 9`,
-      );
+      throw new Error(`Invalid compression level: '${clevel}'. It should be between 0 and 9`);
     }
     if (!COMPRESSORS.has(cname)) {
       throw new Error(
         `Invalid compressor '${cname}'. Valid compressors include
-        'blosclz', 'lz4', 'lz4hc','snappy', 'zlib', 'zstd'.`,
+        'blosclz', 'lz4', 'lz4hc','snappy', 'zlib', 'zstd'.`
       );
     }
     if (shuffle < -1 || shuffle > 2) {
       throw new Error(
         `Invalid shuffle ${shuffle}. Must be one of 0 (NOSHUFFLE),
-        1 (SHUFFLE), 2 (BITSHUFFLE), -1 (AUTOSHUFFLE).`,
+        1 (SHUFFLE), 2 (BITSHUFFLE), -1 (AUTOSHUFFLE).`
       );
     }
     this.blocksize = blocksize;
@@ -86,13 +72,7 @@ class Blosc implements Codec {
       emscriptenModule = initEmscriptenModule(blosc_codec, wasmSrc as string);
     }
     const module = await emscriptenModule;
-    const view = module.compress(
-      data,
-      this.cname,
-      this.clevel,
-      this.shuffle,
-      this.blocksize,
-    );
+    const view = module.compress(data, this.cname, this.clevel, this.shuffle, this.blocksize);
     const result = new Uint8Array(view); // Copy view and free wasm memory
     module.free_result();
     return result;

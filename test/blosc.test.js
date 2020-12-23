@@ -1,17 +1,7 @@
-import Blosc from '../src/blosc';
-import { range, linspace, product, checkAsyncEncodeDecode } from './common';
-import {
-  BloscCompressor,
-  BloscCompressionLevel,
-  BloscShuffle,
-} from '../codecs/blosc/blosc_codec';
+import { test } from 'zora';
 
-interface Config {
-  cname?: BloscCompressor;
-  shuffle?: BloscShuffle;
-  clevel?: BloscCompressionLevel;
-  blocksize?: number;
-}
+import { Blosc } from '../dist/index.mjs';
+import { range, linspace, product, checkAsyncEncodeDecode } from './common.js';
 
 const codecConfigs = [
   {},
@@ -37,10 +27,10 @@ const arrays = [
   range(323332, '<i2'),
 ];
 
-test('Ensure all equal', async () => {
+test('Ensure all equal', async t => {
   const codec = new Blosc();
   for (const [config, arr] of product(codecConfigs, arrays)) {
-    const { cname, clevel, shuffle, blocksize } = config as Config;
+    const { cname, clevel, shuffle, blocksize } = config;
     // Rather than reloading all the webassembly,
     // just reuse the loaded emscripten module and update the properties
     if (cname) codec.cname = cname;
@@ -49,18 +39,18 @@ test('Ensure all equal', async () => {
     if (blocksize) codec.blocksize = blocksize;
 
     const encAndDec = await checkAsyncEncodeDecode(codec, arr);
-    expect(arr).toEqual(encAndDec);
+    t.equal(arr, encAndDec);
   }
 });
 
-test('Invalid compressor options', () => {
-  expect(() => new Blosc(2, 'nope')).toThrow();
-  expect(() => new Blosc(-1)).toThrow();
-  expect(() => new Blosc(10)).toThrow();
-  expect(() => new Blosc(5, 'lz4', 3)).toThrow();
+test('Invalid compressor options', t => {
+  t.throws(() => new Blosc(2, 'nope'));
+  t.throws(() => new Blosc(-1));
+  t.throws(() => new Blosc(10));
+  t.throws(() => new Blosc(5, 'lz4', 3));
 });
 
-test('Static constructor', async () => {
+test('Static constructor', async t => {
   const config = {
     id: 'blosc',
     cname: 'lz4',
@@ -70,5 +60,5 @@ test('Static constructor', async () => {
   };
   const codec = Blosc.fromConfig(config);
   const encAndDec = await checkAsyncEncodeDecode(codec, arrays[0]);
-  expect(arrays[0]).toEqual(encAndDec);
+  t.equal(arrays[0], encAndDec);
 });

@@ -30,4 +30,4 @@ export interface BloscModule extends EmscriptenModule {
   free_result(): void;
 }
 
-export default function (opts: EmscriptenModuleOpts): BloscModule;
+export default function (opts: EmscriptenModuleOpts): Promise<BloscModule>;

@@ -1,4 +1,3 @@
-import commonjs from '@rollup/plugin-commonjs';
 import resolve from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 
@@ -14,6 +13,7 @@ export default [
         format: 'cjs',
         entryFileNames: '[name].cjs',
         chunkFileNames: '[name]-[hash].cjs',
+        exports: 'auto',
       },
       {
         dir: './dist',
@@ -24,7 +24,6 @@ export default [
     ],
     plugins: [
       typescript({ declaration: true, declarationDir: './dist/types/' }),
-      commonjs({ exclude: './codecs/**/*' }),
       resolve(),
     ],
   },
