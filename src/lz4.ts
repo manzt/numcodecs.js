@@ -17,16 +17,12 @@ class LZ4 implements Codec {
 
   constructor(acceleration = DEFAULT_ACCELERATION) {
     if (!Number.isInteger(acceleration)) {
-      throw Error(
-        `Invalid acceleration "${acceleration}". Must be a positive integer.`,
-      );
+      throw Error(`Invalid acceleration "${acceleration}". Must be a positive integer.`);
     }
     this.acceleration = acceleration <= 0 ? DEFAULT_ACCELERATION : acceleration;
   }
 
-  static fromConfig({
-    acceleration,
-  }: { acceleration?: number } & CompressorConfig): LZ4 {
+  static fromConfig({ acceleration }: { acceleration?: number } & CompressorConfig): LZ4 {
     return new LZ4(acceleration);
   }
 
@@ -36,9 +32,7 @@ class LZ4 implements Codec {
     }
 
     if (data.length > MAX_BUFFER_SIZE) {
-      throw Error(
-        `Codec does not support buffers of > ${MAX_BUFFER_SIZE} bytes.`,
-      );
+      throw Error(`Codec does not support buffers of > ${MAX_BUFFER_SIZE} bytes.`);
     }
 
     const module = await emscriptenModule;
@@ -54,9 +48,7 @@ class LZ4 implements Codec {
     }
 
     if (data.length > MAX_BUFFER_SIZE) {
-      throw Error(
-        `Codec does not support buffers of > ${MAX_BUFFER_SIZE} bytes.`,
-      );
+      throw Error(`Codec does not support buffers of > ${MAX_BUFFER_SIZE} bytes.`);
     }
 
     const module = await emscriptenModule;
