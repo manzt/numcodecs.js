@@ -2,7 +2,7 @@ import resolve from '@rollup/plugin-node-resolve';
 import typescript from '@rollup/plugin-typescript';
 import { base64 } from 'rollup-plugin-base64';
 
-const codecs = ['zlib', 'gzip', 'blosc', 'lz4'];
+const codecs = ['zlib', 'gzip', 'blosc', 'lz4', 'zstd'];
 const inputs = Object.fromEntries(codecs.map((c) => [c, `./src/${c}.ts`]));
 
 export default [
