@@ -27,6 +27,10 @@
     "./lz4": {
       "import": "./dist/lz4.mjs",
       "require": "./dist/lz4.cjs"
+    },
+    "./zstd": {
+      "import": "./dist/zstd.mjs",
+      "require": "./dist/zstd.cjs"
     }
   },
   "sideEffects": false,
