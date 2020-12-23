@@ -1,7 +1,9 @@
 import { Codec, CompressorConfig } from './types';
 import { initEmscriptenModule } from './utils';
 import lz4_codec, { LZ4Module } from '../codecs/lz4/lz4_codec';
-import wasmSrc from '../codecs/lz4/lz4_codec_wasm';
+
+// @ts-ignore
+import wasmSrc from '../codecs/lz4/lz4_codec.wasm';
 
 const DEFAULT_ACCELERATION = 1;
 const MAX_BUFFER_SIZE = 0x7e000000;

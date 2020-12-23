@@ -85,13 +85,5 @@ cd ../../../
 )
 
 echo "============================================="
-echo "Encode binary as base64."
-echo "============================================="
-
-echo -en "const wasmBase64 = \`" > ./blosc_codec_wasm.ts
-base64 ./blosc_codec.wasm | tr -d "\n" >> ./blosc_codec_wasm.ts
-echo -en "\`;\n\nexport default wasmBase64;\n" >> ./blosc_codec_wasm.ts
-
-echo "============================================="
 echo "Finished."
 echo "============================================="
