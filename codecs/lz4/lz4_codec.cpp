@@ -5,6 +5,8 @@
 
 using namespace emscripten;
 
+////// stdint compat ///////
+// copied from https://github.com/zarr-developers/numcodecs/blob/master/numcodecs/stdint_compat.h
 static inline void store_le32(char *c, int y)
 {
     uint32_t x = (uint32_t) y;
@@ -23,6 +25,8 @@ static inline int load_le32(const char *c)
 }
 
 static const int UINT32_SIZE = sizeof (uint32_t);
+
+////////////////////////////////////////////////
 
 char *dest_ptr;
 val compress(std::string source, int acceleration)
