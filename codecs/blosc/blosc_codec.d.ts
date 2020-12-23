@@ -26,7 +26,6 @@ export interface BloscModule extends EmscriptenModule {
     blocksize: number,
   ): Uint8Array;
   decompress(data: BufferSource): Uint8Array;
-  // eslint-disable-next-line @typescript-eslint/camelcase
   free_result(): void;
 }
 
