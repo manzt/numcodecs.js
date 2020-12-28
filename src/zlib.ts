@@ -1,7 +1,7 @@
-import { Codec, CompressorConfig } from './types';
 import pako from 'pako';
+import type { Codec, CompressorConfig } from './utils';
 
-export type ValidZlibLevelSetting = -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+type ValidZlibLevelSetting = -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
 class Zlib implements Codec {
   public static codecId = 'zlib';
@@ -23,7 +23,7 @@ class Zlib implements Codec {
     return gzipped;
   }
 
-  decode(data: Uint8Array, out?: Buffer): Uint8Array {
+  decode(data: Uint8Array, out?: Uint8Array): Uint8Array {
     const uncompressed = pako.inflate(data);
     if (out !== undefined) {
       out.set(uncompressed);

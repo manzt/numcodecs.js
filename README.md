@@ -40,10 +40,15 @@ console.log(new Uint32Array(decoded.buffer));
 
 ### Author's note
 
-This project is intended as a Typescript implementation of the buffer compression library [`numcodecs`](https://github.com/zarr-developers/numcodecs) which supports 
-[`zarr-python`](https://github.com/zarr-developers/zarr-python). Currently `blosc`, 
-`zlib`, `gzip`, `lz4`, and `zstd` compressors are supported. No other compressors are 
-implemented, but contributions are welcome!
+This project is an incomplete TypeScript implementation of the buffer compression library 
+[`numcodecs`](https://github.com/zarr-developers/numcodecs). The following codecs 
+are currently supported:
+
+- `blosc`
+- `gzip`
+- `lz4`
+- `zlib`
+- `zstd`
 
 
 ### Conditional exports
@@ -56,4 +61,13 @@ const Zlib = require('numcodecs/zlib');
 
 // index.mjs
 import Zlib from 'numcodecs/zlib';
+```
+
+### Publishing
+
+```bash
+$ npm version [<newversion> | major | minor | patch]
+$ npm run build # bundles source & copies README.md + package.json to dist/
+$ cd dist
+$ npm publish
 ```

@@ -1,24 +1,13 @@
 {
+  "include": ["src", "types", "codecs"],
   "compilerOptions": {
+    "module": "esnext",
     "target": "esnext",
-    "module": "ESNext",
-    "strict": true,
-    "allowJs": true,
     "moduleResolution": "node",
-    "resolveJsonModule": true,
-    "noImplicitAny": true,
+    "baseUrl": "./",
+    "strict": true,
+    "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
-    "downlevelIteration": true,
-    "noUnusedLocals": true,
-    "noFallthroughCasesInSwitch": true,
-    "typeRoots": ["./node_modules/@types"],
-    "lib": ["dom", "esnext"],
-    "noEmitOnError": false,
-    "baseUrl": ".",
-    "esModuleInterop": true,
-    "rootDir": ".",
-    "noEmit": true
-  },
-  "includes": ["src/**/*", "codecs/**/*"],
-  "exclude": ["dist", "node_modules", "test/**/*.ts"]
+    "importsNotUsedAsValues": "error"
+  }
 }

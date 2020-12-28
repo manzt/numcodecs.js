@@ -1,4 +1,12 @@
-import { EmscriptenModule, EmscriptenModuleOpts } from '../codecs/types';
+export abstract class Codec {
+  static codecId: string;
+  abstract encode(data: Uint8Array): Uint8Array | Promise<Uint8Array>;
+  abstract decode(data: Uint8Array, out?: Uint8Array): Uint8Array | Promise<Uint8Array>;
+}
+
+export interface CompressorConfig {
+  id: string;
+}
 
 const IS_NODE = typeof process !== 'undefined' && process.versions != null && process.versions.node != null;
 
@@ -26,11 +34,8 @@ export let __toBinary = IS_NODE
       };
     })();
 
-// Adapted from https://github.com/GoogleChromeLabs/squoosh/blob/master/src/codecs/util.ts
-export type ModuleFactory<M extends EmscriptenModule> = (opts: EmscriptenModuleOpts) => Promise<M>;
-
-export function initEmscriptenModule<M extends EmscriptenModule>(
-  moduleFactory: ModuleFactory<M>,
+export function initEmscriptenModule<M extends EmscriptenWasm.Module>(
+  moduleFactory: EmscriptenWasm.ModuleFactory<M>,
   src: string
 ): Promise<M> {
   const wasmBinary = __toBinary(src);

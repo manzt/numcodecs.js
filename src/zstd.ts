@@ -1,9 +1,7 @@
-import { Codec, CompressorConfig } from './types';
 import { initEmscriptenModule } from './utils';
 import zstd_codec, { ZstdModule } from '../codecs/zstd/zstd_codec';
-
-// @ts-ignore
 import wasmSrc from '../codecs/zstd/zstd_codec.wasm';
+import type { Codec, CompressorConfig } from './utils';
 
 const DEFAULT_CLEVEL = 1;
 const MAX_CLEVEL = 22;
@@ -29,7 +27,7 @@ class Zstd implements Codec {
 
   async encode(data: Uint8Array): Promise<Uint8Array> {
     if (!emscriptenModule) {
-      emscriptenModule = initEmscriptenModule(zstd_codec, wasmSrc as string);
+      emscriptenModule = initEmscriptenModule(zstd_codec, wasmSrc);
     }
     let level = this.level;
     if (level <= 0) {
@@ -47,7 +45,7 @@ class Zstd implements Codec {
 
   async decode(data: Uint8Array, out?: Uint8Array): Promise<Uint8Array> {
     if (!emscriptenModule) {
-      emscriptenModule = initEmscriptenModule(zstd_codec, wasmSrc as string);
+      emscriptenModule = initEmscriptenModule(zstd_codec, wasmSrc);
     }
 
     const module = await emscriptenModule;

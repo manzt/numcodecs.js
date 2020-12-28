@@ -1,5 +1,3 @@
-import { EmscriptenModule, EmscriptenModuleOpts } from '../types';
-
 export enum BloscShuffle {
   NOSHUFFLE = 0,
   SHUFFLE = 1,
@@ -17,7 +15,7 @@ export type BloscCompressor =
   | 'zlib'
   | 'zstd';
 
-export interface BloscModule extends EmscriptenModule {
+export interface BloscModule extends EmscriptenWasm.Module {
   compress(
     data: BufferSource,
     cname: BloscCompressor,
@@ -29,4 +27,6 @@ export interface BloscModule extends EmscriptenModule {
   free_result(): void;
 }
 
-export default function (opts: EmscriptenModuleOpts): Promise<BloscModule>;
+declare const moduleFactory: EmscriptenWasm.ModuleFactory<BloscModule>;
+
+export default moduleFactory;
