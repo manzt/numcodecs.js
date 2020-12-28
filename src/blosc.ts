@@ -1,9 +1,7 @@
-import { Codec, CompressorConfig } from './types';
 import { initEmscriptenModule } from './utils';
 import blosc_codec, { BloscModule } from '../codecs/blosc/blosc_codec';
-
-// @ts-ignore
 import wasmSrc from '../codecs/blosc/blosc_codec.wasm';
+import type { Codec, CompressorConfig } from './utils';
 
 enum BloscShuffle {
   NOSHUFFLE = 0,
@@ -55,23 +53,16 @@ class Blosc implements Codec {
     this.shuffle = shuffle;
   }
 
-  static fromConfig({
-    blocksize,
-    clevel,
-    cname,
-    shuffle,
-  }: {
-    blocksize?: number;
-    clevel?: number;
-    cname?: string;
-    shuffle?: BloscShuffle;
-  } & CompressorConfig): Blosc {
+  static fromConfig(
+    config: { blocksize?: number; clevel?: number; cname?: string; shuffle?: BloscShuffle } & CompressorConfig
+  ): Blosc {
+    const { blocksize, clevel, cname, shuffle } = config;
     return new Blosc(clevel, cname, shuffle, blocksize);
   }
 
   async encode(data: Uint8Array): Promise<Uint8Array> {
     if (!emscriptenModule) {
-      emscriptenModule = initEmscriptenModule(blosc_codec, wasmSrc as string);
+      emscriptenModule = initEmscriptenModule(blosc_codec, wasmSrc);
     }
     const module = await emscriptenModule;
     const view = module.compress(data, this.cname, this.clevel, this.shuffle, this.blocksize);
@@ -82,7 +73,7 @@ class Blosc implements Codec {
 
   async decode(data: Uint8Array, out?: Uint8Array): Promise<Uint8Array> {
     if (!emscriptenModule) {
-      emscriptenModule = initEmscriptenModule(blosc_codec, wasmSrc as string);
+      emscriptenModule = initEmscriptenModule(blosc_codec, wasmSrc);
     }
     const module = await emscriptenModule;
     const view = module.decompress(data);

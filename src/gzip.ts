@@ -1,7 +1,7 @@
-import { Codec, CompressorConfig } from './types';
 import pako from 'pako';
+import type { Codec, CompressorConfig } from './utils';
 
-export type ValidGZipLevelSetting = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+type ValidGZipLevelSetting = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
 class GZip implements Codec {
   public static codecId = 'gzip';

@@ -1,32 +1,36 @@
 {
   "name": "numcodecs",
   "author": "Trevor James Manz",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "Buffer compression and transformation codecs for use in data storage and communication applications.",
-  "types": "dist/types/src/index.d.ts",
-  "main": "dist/index.cjs",
-  "module": "dist/index.mjs",
+  "types": "index.d.ts",
+  "main": "index.cjs",
+  "module": "index.mjs",
   "type": "module",
   "exports": {
     ".": {
-      "import": "./dist/index.mjs",
-      "require": "./dist/index.cjs"
+      "import": "./index.mjs",
+      "require": "./index.cjs"
     },
     "./gzip": {
-      "import": "./dist/gzip.mjs",
-      "require": "./dist/gzip.cjs"
+      "import": "./gzip.mjs",
+      "require": "./gzip.cjs"
     },
     "./zlib": {
-      "import": "./dist/zlib.mjs",
-      "require": "./dist/zlib.cjs"
+      "import": "./zlib.mjs",
+      "require": "./zlib.cjs"
     },
     "./blosc": {
-      "import": "./dist/blosc.mjs",
-      "require": "./dist/blosc.cjs"
+      "import": "./blosc.mjs",
+      "require": "./blosc.cjs"
     },
     "./lz4": {
-      "import": "./dist/lz4.mjs",
-      "require": "./dist/lz4.cjs"
+      "import": "./lz4.mjs",
+      "require": "./lz4.cjs"
+    },
+    "./zstd": {
+      "import": "./zstd.mjs",
+      "require": "./zstd.cjs"
     }
   },
   "sideEffects": false,
@@ -35,7 +39,8 @@
     "url": "https://github.com/manzt/numcodecs.js.git"
   },
   "scripts": {
-    "build": "rollup -c",
+    "build": "tsc --emitDeclarationOnly --declaration --outDir dist && rollup -c",
+    "postbuild": "cp package.json dist && cp README.md dist",
     "prebuild": "rm -rf dist",
     "format": "prettier --write src/**/*.ts test/**/*.js",
     "lint": "prettier --check src src/**/*.ts test/**/*.js",
@@ -47,9 +52,6 @@
     "compression",
     "codecs",
     "storage"
-  ],
-  "files": [
-    "dist"
   ],
   "license": "MIT",
   "devDependencies": {

@@ -1,9 +1,7 @@
-import { Codec, CompressorConfig } from './types';
 import { initEmscriptenModule } from './utils';
 import lz4_codec, { LZ4Module } from '../codecs/lz4/lz4_codec';
-
-// @ts-ignore
 import wasmSrc from '../codecs/lz4/lz4_codec.wasm';
+import type { Codec, CompressorConfig } from './utils';
 
 const DEFAULT_ACCELERATION = 1;
 const MAX_BUFFER_SIZE = 0x7e000000;
@@ -30,7 +28,7 @@ class LZ4 implements Codec {
 
   async encode(data: Uint8Array): Promise<Uint8Array> {
     if (!emscriptenModule) {
-      emscriptenModule = initEmscriptenModule(lz4_codec, wasmSrc as string);
+      emscriptenModule = initEmscriptenModule(lz4_codec, wasmSrc);
     }
 
     if (data.length > MAX_BUFFER_SIZE) {
@@ -46,7 +44,7 @@ class LZ4 implements Codec {
 
   async decode(data: Uint8Array, out?: Uint8Array): Promise<Uint8Array> {
     if (!emscriptenModule) {
-      emscriptenModule = initEmscriptenModule(lz4_codec, wasmSrc as string);
+      emscriptenModule = initEmscriptenModule(lz4_codec, wasmSrc);
     }
 
     if (data.length > MAX_BUFFER_SIZE) {
