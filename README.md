@@ -1,6 +1,5 @@
 # numcodecs.js
 [![Actions Status](https://github.com/manzt/numcodecs.js/workflows/tests/badge.svg)](https://github.com/manzt/numcodecs.js/actions)
-![Top Language Badge](https://img.shields.io/github/languages/top/manzt/numcodecs.js)
 [![NPM badge](https://img.shields.io/npm/v/numcodecs)](https://www.npmjs.com/package/numcodecs)
 
 Buffer compression and transformation codecs for use in [Zarr.js](https://github.com/gzuidhof/zarr.js/) and beyond...
@@ -51,9 +50,11 @@ are currently supported:
 - `zstd`
 
 
-### Conditional exports
+### Package exports
 
-Each compressor is bundled as a separate entrypoint and exported as a package submodule using Node's [conditional exports](https://nodejs.org/api/modules.html). This means each compressor can be imported independently from code-split modules. I hope this will afford an option to have a more dynamic and configurable compressor registry in Zarr.js in the future, allowing users to define the codecs necessary for their applications.
+Each compressor is bundled as the default export of separate code-split submodules. 
+This makes it easy to import each module independently in your applications or from
+a ESM-friendly CDN like [skypack](https://www.skypack.dev/).
 
 ```javascript
 // index.js
@@ -61,7 +62,27 @@ const Zlib = require('numcodecs/zlib');
 
 // index.mjs
 import Zlib from 'numcodecs/zlib';
+
+// In the browser...
+import Zlib from 'https://cdn.skypack.dev/numcodecs/zlib';
 ```
+
+### Development
+
+```bash
+$ git clone https://github.com/manzt/numcodecs.js.git 
+$ cd numcodecs.js
+$ npm install && npm run test
+```
+
+The `<codec_name>.js` + `<codec_name>.wasm` source for each WASM-based codec are 
+generated with [Docker](https://www.docker.com/) with the following commands:
+
+```bash
+cd codecs/<codec_name>
+npm run build
+```
+
 
 ### Publishing
 
