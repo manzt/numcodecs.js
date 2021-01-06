@@ -1,13 +1,20 @@
 import { initEmscriptenModule } from './utils';
 import blosc_codec, { BloscModule } from '../codecs/blosc/blosc_codec';
 import wasmSrc from '../codecs/blosc/blosc_codec.wasm';
-import type { Codec, CompressorConfig } from './utils';
+import type { Codec, CodecConstructor } from './utils';
 
 enum BloscShuffle {
   NOSHUFFLE = 0,
   SHUFFLE = 1,
   BITSHUFFLE = 2,
   AUTOSHUFFLE = -1,
+}
+
+interface BloscConfig {
+  blocksize?: number;
+  clevel?: number;
+  cname?: string;
+  shuffle?: BloscShuffle;
 }
 
 type BloscCompressionLevel = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
@@ -18,7 +25,7 @@ const COMPRESSORS = new Set(['blosclz', 'lz4', 'lz4hc', 'snappy', 'zlib', 'zstd'
 
 let emscriptenModule: Promise<BloscModule>;
 
-class Blosc implements Codec {
+const Blosc: CodecConstructor<BloscConfig> = class Blosc implements Codec {
   public static codecId = 'blosc';
   public static COMPRESSORS = [...COMPRESSORS];
   public static NOSHUFFLE = BloscShuffle.NOSHUFFLE;
@@ -53,10 +60,7 @@ class Blosc implements Codec {
     this.shuffle = shuffle;
   }
 
-  static fromConfig(
-    config: { blocksize?: number; clevel?: number; cname?: string; shuffle?: BloscShuffle } & CompressorConfig
-  ): Blosc {
-    const { blocksize, clevel, cname, shuffle } = config;
+  static fromConfig({ blocksize, clevel, cname, shuffle }: BloscConfig): Blosc {
     return new Blosc(clevel, cname, shuffle, blocksize);
   }
 
@@ -85,6 +89,6 @@ class Blosc implements Codec {
     }
     return result;
   }
-}
+};
 
 export default Blosc;

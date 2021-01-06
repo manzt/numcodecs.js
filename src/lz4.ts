@@ -1,14 +1,18 @@
 import { initEmscriptenModule } from './utils';
 import lz4_codec, { LZ4Module } from '../codecs/lz4/lz4_codec';
 import wasmSrc from '../codecs/lz4/lz4_codec.wasm';
-import type { Codec, CompressorConfig } from './utils';
+import type { Codec, CodecConstructor } from './utils';
 
 const DEFAULT_ACCELERATION = 1;
 const MAX_BUFFER_SIZE = 0x7e000000;
 
 let emscriptenModule: Promise<LZ4Module>;
 
-class LZ4 implements Codec {
+interface LZ4Config {
+  acceleration?: number;
+}
+
+const LZ4: CodecConstructor<LZ4Config> = class LZ4 implements Codec {
   public static codecId = 'lz4';
   public static DEFAULT_ACCELERATION = DEFAULT_ACCELERATION;
   public static max_buffer_size = MAX_BUFFER_SIZE;
@@ -22,7 +26,7 @@ class LZ4 implements Codec {
     this.acceleration = acceleration <= 0 ? DEFAULT_ACCELERATION : acceleration;
   }
 
-  static fromConfig({ acceleration }: { acceleration?: number } & CompressorConfig): LZ4 {
+  static fromConfig({ acceleration }: LZ4Config): LZ4 {
     return new LZ4(acceleration);
   }
 
@@ -61,6 +65,6 @@ class LZ4 implements Codec {
     }
     return result;
   }
-}
+};
 
 export default LZ4;

@@ -1,14 +1,18 @@
 import { initEmscriptenModule } from './utils';
 import zstd_codec, { ZstdModule } from '../codecs/zstd/zstd_codec';
 import wasmSrc from '../codecs/zstd/zstd_codec.wasm';
-import type { Codec, CompressorConfig } from './utils';
+import type { Codec, CodecConstructor } from './utils';
 
 const DEFAULT_CLEVEL = 1;
 const MAX_CLEVEL = 22;
 
 let emscriptenModule: Promise<ZstdModule>;
 
-class Zstd implements Codec {
+interface ZstdConfig {
+  level?: number;
+}
+
+const Zstd: CodecConstructor<ZstdConfig> = class Zstd implements Codec {
   public static codecId = 'zstd';
   public static DEFAULT_CLEVEL = DEFAULT_CLEVEL;
   public static MAX_CLEVEL = MAX_CLEVEL;
@@ -21,7 +25,7 @@ class Zstd implements Codec {
     this.level = level;
   }
 
-  static fromConfig({ level }: { level?: number } & CompressorConfig): Zstd {
+  static fromConfig({ level }: ZstdConfig): Zstd {
     return new Zstd(level);
   }
 
@@ -47,7 +51,6 @@ class Zstd implements Codec {
     if (!emscriptenModule) {
       emscriptenModule = initEmscriptenModule(zstd_codec, wasmSrc);
     }
-
     const module = await emscriptenModule;
     const view = module.decompress(data);
     const result = new Uint8Array(view); // Copy view and free wasm memory
@@ -58,6 +61,6 @@ class Zstd implements Codec {
     }
     return result;
   }
-}
+};
 
 export default Zstd;

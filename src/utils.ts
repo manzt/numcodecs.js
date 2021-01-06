@@ -1,11 +1,11 @@
-export abstract class Codec {
-  static codecId: string;
-  abstract encode(data: Uint8Array): Uint8Array | Promise<Uint8Array>;
-  abstract decode(data: Uint8Array, out?: Uint8Array): Uint8Array | Promise<Uint8Array>;
+export interface CodecConstructor<T> {
+  fromConfig(config: T & { id: string }): Codec;
+  codecId: string;
 }
 
-export interface CompressorConfig {
-  id: string;
+export interface Codec {
+  encode(data: Uint8Array): Uint8Array | Promise<Uint8Array>;
+  decode(data: Uint8Array, out?: Uint8Array): Uint8Array | Promise<Uint8Array>;
 }
 
 const IS_NODE = typeof process !== 'undefined' && process.versions != null && process.versions.node != null;
