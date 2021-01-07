@@ -1,9 +1,13 @@
 import pako from 'pako';
-import type { Codec, CompressorConfig } from './utils';
+import type { Codec, CodecConstructor } from './utils';
 
 type ValidGZipLevelSetting = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
-class GZip implements Codec {
+interface GZipConfig {
+  level?: number;
+}
+
+const GZip: CodecConstructor<GZipConfig> = class GZip implements Codec {
   public static codecId = 'gzip';
   public level: ValidGZipLevelSetting;
 
@@ -14,7 +18,7 @@ class GZip implements Codec {
     this.level = level as ValidGZipLevelSetting;
   }
 
-  static fromConfig({ level }: { level: number } & CompressorConfig): GZip {
+  static fromConfig({ level }: GZipConfig): GZip {
     return new GZip(level);
   }
 
@@ -31,6 +35,6 @@ class GZip implements Codec {
     }
     return uncompressed;
   }
-}
+};
 
 export default GZip;

@@ -1,9 +1,13 @@
 import pako from 'pako';
-import type { Codec, CompressorConfig } from './utils';
+import type { Codec, CodecConstructor } from './utils';
 
 type ValidZlibLevelSetting = -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
-class Zlib implements Codec {
+interface ZlibConfig {
+  level?: number;
+}
+
+const Zlib: CodecConstructor<ZlibConfig> = class Zlib implements Codec {
   public static codecId = 'zlib';
   public level: ValidZlibLevelSetting;
 
@@ -14,7 +18,7 @@ class Zlib implements Codec {
     this.level = level as ValidZlibLevelSetting;
   }
 
-  static fromConfig({ level }: { level: number } & CompressorConfig): Zlib {
+  static fromConfig({ level }: ZlibConfig): Zlib {
     return new Zlib(level);
   }
 
@@ -31,6 +35,6 @@ class Zlib implements Codec {
     }
     return uncompressed;
   }
-}
+};
 
 export default Zlib;
