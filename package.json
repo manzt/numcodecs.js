@@ -58,7 +58,7 @@
     "@rollup/plugin-node-resolve": "^11.2.0",
     "@rollup/plugin-typescript": "^8.2.0",
     "@types/pako": "^1.0.1",
-    "pako": "^2.0.2",
+    "pako": "^2.0.3",
     "prettier": "^2.2.1",
     "rollup": "^2.40.0",
     "rollup-plugin-base64": "^1.0.1",
