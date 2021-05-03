@@ -57,8 +57,8 @@ val decompress(std::string source)
     int source_size = source.size();
 
     // setup destination buffer
-    dest_ptr = (char *)malloc((size_t)source_size);
     int dest_size = load_le32(source_ptr);
+    dest_ptr = (char *)malloc((size_t)dest_size);
     const char *source_start = source_ptr + UINT32_SIZE;
     source_size -= UINT32_SIZE;
 
