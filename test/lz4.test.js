@@ -1,6 +1,6 @@
 import { test } from 'zora';
 
-import { LZ4 } from '../dist/index.mjs';
+import { LZ4 } from '../dist/index.js';
 import { range, linspace, product, checkAsyncEncodeDecode } from './common.js';
 
 const codecConfigs = [

@@ -1,6 +1,6 @@
 import { test } from 'zora';
 
-import { Blosc } from '../dist/index.mjs';
+import { Blosc } from '../dist/index.js';
 import { range, linspace, product, checkAsyncEncodeDecode } from './common.js';
 
 const codecConfigs = [
