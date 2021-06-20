@@ -1,6 +1,6 @@
 import { test } from 'zora';
 
-import { Zstd } from '../dist/index.mjs';
+import { Zstd } from '../dist/index.js';
 import { range, linspace, product, checkAsyncEncodeDecode } from './common.js';
 
 const codecConfigs = [

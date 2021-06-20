@@ -1,6 +1,6 @@
 import { test } from 'zora';
 
-import { Zlib } from '../dist/index.mjs';
+import { Zlib } from '../dist/index.js';
 import { range, linspace, product, checkEncodeDecode } from './common.js';
 
 const codecs = [new Zlib(), new Zlib(-1), new Zlib(0), new Zlib(5), new Zlib(9)];

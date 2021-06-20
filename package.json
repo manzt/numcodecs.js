@@ -4,34 +4,16 @@
   "version": "0.2.1",
   "description": "Buffer compression and transformation codecs for use in data storage and communication applications.",
   "types": "index.d.ts",
-  "main": "index.cjs",
-  "module": "index.mjs",
+  "main": "index.js",
+  "module": "index.js",
   "type": "module",
   "exports": {
-    ".": {
-      "import": "./index.mjs",
-      "require": "./index.cjs"
-    },
-    "./gzip": {
-      "import": "./gzip.mjs",
-      "require": "./gzip.cjs"
-    },
-    "./zlib": {
-      "import": "./zlib.mjs",
-      "require": "./zlib.cjs"
-    },
-    "./blosc": {
-      "import": "./blosc.mjs",
-      "require": "./blosc.cjs"
-    },
-    "./lz4": {
-      "import": "./lz4.mjs",
-      "require": "./lz4.cjs"
-    },
-    "./zstd": {
-      "import": "./zstd.mjs",
-      "require": "./zstd.cjs"
-    }
+    ".": "./index.js",
+    "./gzip": "./gzip.js",
+    "./zlib": "./zlib.js",
+    "./blosc": "./blosc.js",
+    "./lz4": "./lz4.js",
+    "./zstd": "./zstd.js"
   },
   "sideEffects": false,
   "repository": {
@@ -53,6 +35,9 @@
     "codecs",
     "storage"
   ],
+  "engines": {
+    "node": ">=12"
+  },
   "license": "MIT",
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^11.2.0",

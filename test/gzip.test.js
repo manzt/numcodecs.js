@@ -1,6 +1,6 @@
 import { test } from 'zora';
 
-import { GZip } from '../dist/index.mjs';
+import { GZip } from '../dist/index.js';
 import { range, linspace, product, checkEncodeDecode } from './common.js';
 
 const codecs = [new GZip(), new GZip(2), new GZip(0), new GZip(5), new GZip(9)];
