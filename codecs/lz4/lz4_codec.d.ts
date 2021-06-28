@@ -1,6 +1,3 @@
-import { initEmscriptenModule } from "src/utils";
-import { EmitFlags } from "typescript";
-
 export interface LZ4Module extends EmscriptenWasm.Module {
   compress(data: BufferSource, acceleration: number): Uint8Array;
   decompress(data: BufferSource): Uint8Array;
