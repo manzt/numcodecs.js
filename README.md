@@ -56,14 +56,21 @@ Each compressor is bundled as the default export of separate code-split submodul
 This makes it easy to import each module independently in your applications or from
 a ESM-friendly CDN like [skypack](https://www.skypack.dev/).
 
+- Node / bundlers
 ```javascript
-// index.js
-const Zlib = require('numcodecs/zlib');
+// Main entry point (exports all codecs)
+import { Zlib } from 'numcodecs';
 
-// index.mjs
+// Submodule entry point (exports only `zlib`)
 import Zlib from 'numcodecs/zlib';
+```
 
-// In the browser...
+- Browser / Deno
+```javascript
+// Main entry point (exports all codecs)
+import { Zlib } from 'https://cdn.skypack.dev/numcodecs';
+
+// Submodule entry point (exports only `zlib`)
 import Zlib from 'https://cdn.skypack.dev/numcodecs/zlib';
 ```
 
