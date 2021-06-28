@@ -1,6 +1,5 @@
-import { initEmscriptenModule } from './utils';
-import lz4_codec, { LZ4Module } from '../codecs/lz4/lz4_codec';
-import wasmSrc from 'base64:../codecs/lz4/lz4_codec.wasm';
+import moduleFactory, { LZ4Module } from '../codecs/lz4/lz4_codec';
+import wasmBinary from 'base64:../codecs/lz4/lz4_codec.wasm';
 import type { Codec, CodecConstructor } from './utils';
 
 const DEFAULT_ACCELERATION = 1;
@@ -32,7 +31,7 @@ const LZ4: CodecConstructor<LZ4Config> = class LZ4 implements Codec {
 
   async encode(data: Uint8Array): Promise<Uint8Array> {
     if (!emscriptenModule) {
-      emscriptenModule = initEmscriptenModule(lz4_codec, wasmSrc);
+      emscriptenModule = moduleFactory({ wasmBinary });
     }
 
     if (data.length > MAX_BUFFER_SIZE) {
@@ -48,7 +47,7 @@ const LZ4: CodecConstructor<LZ4Config> = class LZ4 implements Codec {
 
   async decode(data: Uint8Array, out?: Uint8Array): Promise<Uint8Array> {
     if (!emscriptenModule) {
-      emscriptenModule = initEmscriptenModule(lz4_codec, wasmSrc);
+      emscriptenModule = moduleFactory({ wasmBinary });
     }
 
     if (data.length > MAX_BUFFER_SIZE) {

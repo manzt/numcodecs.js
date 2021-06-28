@@ -1,6 +1,5 @@
-import { initEmscriptenModule } from './utils';
-import blosc_codec, { BloscModule } from '../codecs/blosc/blosc_codec';
-import wasmSrc from 'base64:../codecs/blosc/blosc_codec.wasm';
+import moduleFactory, { BloscModule } from '../codecs/blosc/blosc_codec';
+import wasmBinary from 'base64:../codecs/blosc/blosc_codec.wasm';
 import type { Codec, CodecConstructor } from './utils';
 
 enum BloscShuffle {
@@ -66,7 +65,7 @@ const Blosc: CodecConstructor<BloscConfig> = class Blosc implements Codec {
 
   async encode(data: Uint8Array): Promise<Uint8Array> {
     if (!emscriptenModule) {
-      emscriptenModule = initEmscriptenModule(blosc_codec, wasmSrc);
+      emscriptenModule = moduleFactory({ wasmBinary });
     }
     const module = await emscriptenModule;
     const view = module.compress(data, this.cname, this.clevel, this.shuffle, this.blocksize);
@@ -77,7 +76,7 @@ const Blosc: CodecConstructor<BloscConfig> = class Blosc implements Codec {
 
   async decode(data: Uint8Array, out?: Uint8Array): Promise<Uint8Array> {
     if (!emscriptenModule) {
-      emscriptenModule = initEmscriptenModule(blosc_codec, wasmSrc);
+      emscriptenModule = moduleFactory({ wasmBinary });
     }
     const module = await emscriptenModule;
     const view = module.decompress(data);
