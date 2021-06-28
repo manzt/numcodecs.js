@@ -1,6 +1,6 @@
 import { initEmscriptenModule } from './utils';
 import blosc_codec, { BloscModule } from '../codecs/blosc/blosc_codec';
-import wasmSrc from '../codecs/blosc/blosc_codec.wasm';
+import wasmSrc from 'base64:../codecs/blosc/blosc_codec.wasm';
 import type { Codec, CodecConstructor } from './utils';
 
 enum BloscShuffle {

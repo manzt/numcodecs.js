@@ -1,6 +1,6 @@
 import { initEmscriptenModule } from './utils';
 import lz4_codec, { LZ4Module } from '../codecs/lz4/lz4_codec';
-import wasmSrc from '../codecs/lz4/lz4_codec.wasm';
+import wasmSrc from 'base64:../codecs/lz4/lz4_codec.wasm';
 import type { Codec, CodecConstructor } from './utils';
 
 const DEFAULT_ACCELERATION = 1;

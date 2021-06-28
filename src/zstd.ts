@@ -1,6 +1,6 @@
 import { initEmscriptenModule } from './utils';
 import zstd_codec, { ZstdModule } from '../codecs/zstd/zstd_codec';
-import wasmSrc from '../codecs/zstd/zstd_codec.wasm';
+import wasmSrc from 'base64:../codecs/zstd/zstd_codec.wasm';
 import type { Codec, CodecConstructor } from './utils';
 
 const DEFAULT_CLEVEL = 1;
