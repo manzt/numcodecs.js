@@ -1,12 +1,12 @@
-import { initEmscriptenModule } from './utils';
-import zstd_codec, { ZstdModule } from '../codecs/zstd/zstd_codec';
-import wasmSrc from '../codecs/zstd/zstd_codec.wasm';
-import type { Codec, CodecConstructor } from './utils';
+import moduleFactory, { ZstdModule } from '../codecs/zstd/zstd_codec';
+import wasmBinary from 'base64:../codecs/zstd/zstd_codec.wasm';
+import type { Codec, CodecConstructor } from './types';
 
 const DEFAULT_CLEVEL = 1;
 const MAX_CLEVEL = 22;
 
 let emscriptenModule: Promise<ZstdModule>;
+const init = () => moduleFactory({ noInitialRun: true, wasmBinary });
 
 interface ZstdConfig {
   level?: number;
@@ -31,7 +31,7 @@ const Zstd: CodecConstructor<ZstdConfig> = class Zstd implements Codec {
 
   async encode(data: Uint8Array): Promise<Uint8Array> {
     if (!emscriptenModule) {
-      emscriptenModule = initEmscriptenModule(zstd_codec, wasmSrc);
+      emscriptenModule = init();
     }
     let level = this.level;
     if (level <= 0) {
@@ -49,7 +49,7 @@ const Zstd: CodecConstructor<ZstdConfig> = class Zstd implements Codec {
 
   async decode(data: Uint8Array, out?: Uint8Array): Promise<Uint8Array> {
     if (!emscriptenModule) {
-      emscriptenModule = initEmscriptenModule(zstd_codec, wasmSrc);
+      emscriptenModule = init();
     }
     const module = await emscriptenModule;
     const view = module.decompress(data);

@@ -1,4 +1,4 @@
-declare module "*.wasm" {
-  const value: string;
+declare module "base64:*" {
+  const value: Uint8Array;
   export default value;
 }
