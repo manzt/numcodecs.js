@@ -1,7 +1,7 @@
-import pako from 'pako';
+import { zlibSync, decompressSync } from 'fflate';
 import type { Codec, CodecConstructor } from './types';
 
-type ValidZlibLevelSetting = -1 | 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
+type ValidZlibLevelSetting = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
 
 interface ZlibConfig {
   level?: number;
@@ -23,17 +23,11 @@ const Zlib: CodecConstructor<ZlibConfig> = class Zlib implements Codec {
   }
 
   encode(data: Uint8Array): Uint8Array {
-    const gzipped = pako.deflate(data, { level: this.level });
-    return gzipped;
+    return zlibSync(data, { level: this.level });
   }
 
   decode(data: Uint8Array, out?: Uint8Array): Uint8Array {
-    const uncompressed = pako.inflate(data);
-    if (out !== undefined) {
-      out.set(uncompressed);
-      return out;
-    }
-    return uncompressed;
+    return decompressSync(data, out);
   }
 };
 

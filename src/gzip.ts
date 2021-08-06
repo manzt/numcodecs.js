@@ -1,4 +1,4 @@
-import pako from 'pako';
+import { gzipSync, decompressSync } from 'fflate';
 import type { Codec, CodecConstructor } from './types';
 
 type ValidGZipLevelSetting = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
@@ -23,17 +23,11 @@ const GZip: CodecConstructor<GZipConfig> = class GZip implements Codec {
   }
 
   encode(data: Uint8Array): Uint8Array {
-    const gzipped = pako.gzip(data, { level: this.level });
-    return gzipped;
+    return gzipSync(data, { level: this.level });
   }
 
   decode(data: Uint8Array, out?: Uint8Array): Uint8Array {
-    const uncompressed = pako.ungzip(data);
-    if (out !== undefined) {
-      out.set(uncompressed);
-      return out;
-    }
-    return uncompressed;
+    return decompressSync(data, out);
   }
 };
 
