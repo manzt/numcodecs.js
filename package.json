@@ -41,6 +41,7 @@
   "license": "MIT",
   "devDependencies": {
     "@rollup/plugin-node-resolve": "^11.2.0",
+    "@types/emscripten": "^1.39.5",
     "@types/pako": "^1.0.1",
     "esbuild": "^0.12.11",
     "pako": "^2.0.3",
@@ -57,6 +58,5 @@
     "semi": true,
     "singleQuote": true,
     "arrowParens": "avoid"
-  },
-  "dependencies": {}
+  }
 }

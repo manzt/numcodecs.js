@@ -15,7 +15,7 @@ export type BloscCompressor =
   | 'zlib'
   | 'zstd';
 
-export interface BloscModule extends EmscriptenWasm.Module {
+export interface BloscModule extends EmscriptenModule {
   compress(
     data: BufferSource,
     cname: BloscCompressor,
@@ -27,6 +27,6 @@ export interface BloscModule extends EmscriptenWasm.Module {
   free_result(): void;
 }
 
-declare const moduleFactory: EmscriptenWasm.ModuleFactory<BloscModule>;
+declare const moduleFactory: EmscriptenModuleFactory<BloscModule>;
 
 export default moduleFactory;

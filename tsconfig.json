@@ -3,10 +3,12 @@
   "compilerOptions": {
     "module": "esnext",
     "target": "esnext",
+    "types": [
+      "@types/emscripten"
+    ],
     "moduleResolution": "node",
     "baseUrl": "./",
     "strict": true,
-    "skipLibCheck": true,
     "allowSyntheticDefaultImports": true,
     "importsNotUsedAsValues": "error"
   }
