@@ -1,5 +1,5 @@
 import moduleFactory, { BloscModule } from '../codecs/blosc/blosc_codec';
-import wasmBinary from 'base64:../codecs/blosc/blosc_codec.wasm';
+import wasmBinary from '../codecs/blosc/blosc_codec.wasm';
 import type { Codec, CodecConstructor } from './types';
 
 enum BloscShuffle {

@@ -1,5 +1,5 @@
 import moduleFactory, { ZstdModule } from '../codecs/zstd/zstd_codec';
-import wasmBinary from 'base64:../codecs/zstd/zstd_codec.wasm';
+import wasmBinary from '../codecs/zstd/zstd_codec.wasm';
 import type { Codec, CodecConstructor } from './types';
 
 const DEFAULT_CLEVEL = 1;

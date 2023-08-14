@@ -1,5 +1,5 @@
 import moduleFactory, { LZ4Module } from '../codecs/lz4/lz4_codec';
-import wasmBinary from 'base64:../codecs/lz4/lz4_codec.wasm';
+import wasmBinary from '../codecs/lz4/lz4_codec.wasm';
 import type { Codec, CodecConstructor } from './types';
 
 const DEFAULT_ACCELERATION = 1;
