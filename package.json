@@ -59,7 +59,7 @@
     "esbuild": "^0.12.11",
     "prettier": "^2.2.1",
     "tap-set-exit": "^1.1.1",
-    "typescript": "^4.2.2",
+    "typescript": "^5.1.6",
     "zora": "^4.0.2"
   },
   "prettier": {
