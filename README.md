@@ -15,7 +15,7 @@ npm install numcodecs
 ```javascript
 import { Blosc, GZip, Zlib, LZ4, Zstd } from 'numcodecs';
 
-const codec = new Blosc(); 
+const codec = new Blosc();
 // or Blosc.fromConfig({ clevel: 5, cname: 'lz4', shuffle: Blosc.SHUFFLE, blocksize: 0 });
 
 const size = 100000;
@@ -39,8 +39,8 @@ console.log(new Uint32Array(decoded.buffer));
 
 ### Author's note
 
-This project is an incomplete TypeScript implementation of the buffer compression library 
-[`numcodecs`](https://github.com/zarr-developers/numcodecs). The following codecs 
+This project is an incomplete TypeScript implementation of the buffer compression library
+[`numcodecs`](https://github.com/zarr-developers/numcodecs). The following codecs
 are currently supported:
 
 - `blosc`
@@ -52,7 +52,7 @@ are currently supported:
 
 ### Package exports
 
-Each compressor is bundled as the default export of separate code-split submodules. 
+Each compressor is bundled as the default export of separate code-split submodules.
 This makes it easy to import each module independently in your applications or from
 a ESM-friendly CDN like [skypack](https://www.skypack.dev/).
 
@@ -77,12 +77,12 @@ import Zlib from 'https://cdn.skypack.dev/numcodecs/zlib';
 ### Development
 
 ```bash
-$ git clone https://github.com/manzt/numcodecs.js.git 
+$ git clone https://github.com/manzt/numcodecs.js.git
 $ cd numcodecs.js
 $ npm install && npm run test
 ```
 
-The `<codec_name>.js` + `<codec_name>.wasm` source for each WASM-based codec are 
+The `<codec_name>.js` + `<codec_name>.wasm` source for each WASM-based codec are
 generated with [Docker](https://www.docker.com/) with the following commands:
 
 ```bash
@@ -95,7 +95,6 @@ npm run build
 
 ```bash
 $ npm version [<newversion> | major | minor | patch]
-$ npm run build # bundles source & copies README.md + package.json to dist/
-$ cd dist
+$ npm run build
 $ npm publish
 ```
