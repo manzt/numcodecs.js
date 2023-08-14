@@ -1,4 +1,4 @@
-import * as fflate from "fflate";
+import * as fflate from 'fflate';
 import type { Codec, CodecConstructor } from './types';
 
 type ValidGZipLevelSetting = 0 | 1 | 2 | 3 | 4 | 5 | 6 | 7 | 8 | 9;
