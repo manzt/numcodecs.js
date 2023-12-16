@@ -25,7 +25,7 @@ val decompress(std::string source)
     int source_size = source.size();
 
     // setup destination buffer
-    int dest_size = ZSTD_getDecompressedSize(source_ptr, source_size);
+    int dest_size = ZSTD_getFrameContentSize(source_ptr, source_size);
     dest_ptr = (char *)malloc((size_t)dest_size);
 
     int decompressed_size = ZSTD_decompress(dest_ptr, dest_size, source_ptr, source_size);
