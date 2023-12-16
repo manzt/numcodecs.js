@@ -1,6 +1,6 @@
 {
   "name": "numcodecs",
-  "version": "0.3.0",
+  "version": "0.3.1",
   "description": "Buffer compression and transformation codecs for use in data storage and communication applications.",
   "author": "Trevor Manz",
   "license": "MIT",
