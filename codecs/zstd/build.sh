@@ -5,7 +5,7 @@ ROOT_DIR="node_modules"
 rm -rf $ROOT_DIR
 
 CODEC_URL="https://github.com/facebook/zstd"
-CODEC_VERSION="v1.4.4"
+CODEC_VERSION="v1.5.5"
 
 CODEC_DIR="$ROOT_DIR/zstd"
 BUILD_DIR="$CODEC_DIR/build"
