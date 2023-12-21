@@ -12,7 +12,7 @@ import moduleFactory from '../codecs/blosc/blosc_codec.js';
  */
 
 
-/** @type {Promise<import('../codecs/blosc/blosc_codec').BloscModule>} */
+/** @type {Promise<import('../codecs/blosc/blosc_codec.js').BloscModule>} */
 let emscriptenModule;
 const init = async () => {
   let wasmBinary;
@@ -32,26 +32,29 @@ const init = async () => {
 
 export default class Blosc {
   static codecId = 'blosc';
-  static COMPRESSORS = [...COMPRESSORS];
-  static NOSHUFFLE = 0;
+  /** @type {0} */
+  static NOSHUFFLE = /** @type {const} */ 0;
+  /** @type {1} */
   static SHUFFLE = 1;
+  /** @type {2} */
   static BITSHUFFLE = 2;
+  /** @type {-1} */
   static AUTOSHUFFLE = -1;
 
   /**
-   * @param {number} clevel
+   * @param {CompressionLevel} clevel
    * @param {Compressor} cname
    * @param {Shuffle} shuffle
    * @param {number} blocksize
    */
-  constructor(clevel = 5, cname = 'lz4', shuffle = BloscShuffle.SHUFFLE, blocksize = 0) {
+  constructor(clevel = 5, cname = 'lz4', shuffle = Blosc.SHUFFLE, blocksize = 0) {
     /** @type {number} */
     this.blocksize = blocksize;
-    /** @type {number} */
+    /** @type {CompressionLevel} */
     this.clevel = clevel;
     /** @type {Compressor} */
     this.cname = cname;
-    /** @type {BloscShuffle} */
+    /** @type {Shuffle} */
     this.shuffle = shuffle;
   }
 

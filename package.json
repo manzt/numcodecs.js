@@ -17,39 +17,41 @@
     "storage"
   ],
   "files": [
-    "dist"
+    "dist",
+    "src",
+    "codecs"
   ],
   "exports": {
     ".": {
-      "types": "./dist/index.d.ts",
-      "import": "./dist/index.js"
+      "types": "./dist/src/index.d.ts",
+      "import": "./src/index.js"
     },
     "./gzip": {
-      "types": "./dist/gzip.d.t.s",
-      "import": "./dist/gzip.js"
+      "types": "./dist/src/gzip.d.ts",
+      "import": "./src/gzip.js"
     },
     "./zlib": {
-      "types": "./dist/zlib.d.ts",
-      "import": "./dist/zlib.js"
+      "types": "./dist/src/zlib.d.ts",
+      "import": "./src/zlib.js"
     },
     "./blosc": {
-      "types": "./dist/blosc.d.ts",
-      "import": "./dist/blosc.js"
+      "types": "./dist/src/blosc.d.ts",
+      "import": "./src/blosc.js"
     },
     "./lz4": {
-      "types": "./dist/lz4.d.ts",
-      "import": "./dist/lz4.js"
+      "types": "./dist/src/lz4.d.ts",
+      "import": "./src/lz4.js"
     },
     "./zstd": {
-      "types": "./dist/zstd.d.ts",
-      "import": "./dist/zstd.js"
+      "types": "./dist/src/zstd.d.ts",
+      "import": "./src/zstd.js"
     }
   },
   "scripts": {
     "prepare": "npm run build",
-    "build": "tsc --emitDeclarationOnly --declaration --outDir dist && node build",
-    "typecheck": "tsc --noEmit",
     "prebuild": "rm -rf dist",
+    "build": "tsc",
+    "typecheck": "tsc --noEmit",
     "format": "prettier --write src/**/*.ts test/**/*.js",
     "lint": "prettier --check src src/**/*.ts test/**/*.js",
     "test": "node test/index.test.js | tap-set-exit"
@@ -62,7 +64,6 @@
     "@svitejs/changesets-changelog-github-compact": "^1.1.0",
     "@types/emscripten": "^1.39.10",
     "@types/node": "^20.10.5",
-    "esbuild": "^0.19.10",
     "prettier": "^3.0.1",
     "tap-set-exit": "^1.1.1",
     "typescript": "^5.1.6",

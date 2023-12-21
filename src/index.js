@@ -1,4 +1,4 @@
-/** @typedef {import('./types').Codec} Codec */
+/** @typedef {import('./types.js').Codec} Codec */
 export { default as GZip } from './gzip.js';
 export { default as Zlib } from './zlib.js';
 export { default as Blosc } from './blosc.js';

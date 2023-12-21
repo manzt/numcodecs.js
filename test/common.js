@@ -1,49 +1,51 @@
-const DTYPES = new Map(
-  Object.entries({
-    u1: Uint8Array,
-    i1: Int8Array,
-    u2: Uint16Array,
-    i2: Int16Array,
-    u4: Uint32Array,
-    i4: Int32Array,
-    f4: Float32Array,
-    f8: Float64Array,
-  })
-);
+const DTYPES = /** @type {const} */ ({
+    uint8: Uint8Array,
+    uint16: Uint16Array,
+    uint32: Uint32Array,
+    int8: Int8Array,
+    int16: Int16Array,
+    int32: Int32Array,
+    float32: Float32Array,
+    float64: Float64Array,
+})
 
-export function range(len, dtype = '<f4') {
-  const t = DTYPES.get(dtype.slice(1));
-  if (!t) {
-    throw new Error(`Dtype not supported, got, ${dtype}`);
-  }
-  return new t([...Array(len).keys()]);
+/**
+  * @param {number} len
+  * @param {keyof typeof DTYPES} dtype
+  */
+export function range(len, dtype = 'float32') {
+  return new DTYPES[dtype]([...Array(len).keys()]);
 }
 
-export function linspace(start, stop, num, dtype = '<f4') {
+/**
+  * @param {number} start
+  * @param {number} stop
+  * @param {number} num
+  * @param {keyof typeof DTYPES} dtype
+  */
+export function linspace(start, stop, num, dtype = 'float32') {
   const arr = [];
   const step = (stop - start) / (num - 1);
   for (let i = 0; i < num; i++) {
     arr.push(start + step * i);
   }
-  const t = DTYPES.get(dtype.slice(1));
-  if (!t) {
-    throw new Error(`Dtype not supported, got, ${dtype}`);
-  }
-  return new t(arr);
+  return new DTYPES[dtype](arr);
 }
 
-export function checkEncodeDecode(codec, arr) {
-  const enc = codec.encode(new Uint8Array(arr.buffer));
-  const dec = codec.decode(enc);
-  return new arr.constructor(dec.buffer);
-}
-
+/**
+  * @template {InstanceType<DTYPES[keyof typeof DTYPES]>} Arr
+  * @param {import('../src/types.js').Codec} codec
+  * @param {Arr} arr
+  * @returns {Promise<Arr>}
+  */
 export async function checkAsyncEncodeDecode(codec, arr) {
   const enc = await codec.encode(new Uint8Array(arr.buffer));
   const dec = await codec.decode(enc);
+  // @ts-expect-error - TS doesn't know that the constructor is a typed array
   return new arr.constructor(dec.buffer);
 }
 
+/** @param {any[]} iterables */
 export function* product(...iterables) {
   if (iterables.length === 0) {
     return;

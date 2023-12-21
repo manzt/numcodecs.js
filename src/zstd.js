@@ -8,7 +8,7 @@ import moduleFactory from '../codecs/zstd/zstd_codec.js';
 const DEFAULT_CLEVEL = 1;
 const MAX_CLEVEL = 22;
 
-/** @type {Promise<import('../codecs/zstd/zstd_codec').ZstdModule>} */
+/** @type {Promise<import('../codecs/zstd/zstd_codec.js').ZstdModule>} */
 let emscriptenModule;
 const init = async () => {
   let wasmBinary;
@@ -38,7 +38,7 @@ export default class Zstd {
     this.level = level;
   }
 
-  /** @param {Config} config */
+  /** @param {Config & { id: "zstd" }} config */
   static fromConfig({ level }) {
     return new Zstd(level);
   }
@@ -77,10 +77,6 @@ export default class Zstd {
     const view = module.decompress(data);
     const result = new Uint8Array(view); // Copy view and free wasm memory
     module.free_result();
-    if (out !== undefined) {
-      out.set(result);
-      return out;
-    }
     return result;
   }
 };

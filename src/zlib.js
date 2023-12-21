@@ -9,7 +9,7 @@ import * as fflate from 'fflate';
 export default class Zlib {
   static codecId = 'zlib';
 
-  /** @param {Level} */
+  /** @param {Level} level */
   constructor(level = 1) {
     /** @type {Level} */
     this.level = level;

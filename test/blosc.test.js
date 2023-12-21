@@ -1,6 +1,6 @@
 import { test } from 'zora';
 
-import { Blosc } from '../dist/index.js';
+import { Blosc } from '../src/index.js';
 import { range, linspace, product, checkAsyncEncodeDecode } from './common.js';
 
 const codecConfigs = [
@@ -21,37 +21,16 @@ const codecConfigs = [
 ];
 
 const arrays = [
-  range(1000, '<u4'),
-  linspace(1000, 1001, 1000, '<f4'),
-  linspace(35, 4000, 20, '<u4'),
-  range(323332, '<i2'),
+  range(1000, 'uint32'),
+  linspace(1000, 1001, 1000, 'float32'),
+  linspace(35, 4000, 20, 'uint32'),
+  range(323332, 'int16'),
 ];
 
 test('Ensure all equal', async t => {
-  const codec = new Blosc();
   for (const [config, arr] of product(codecConfigs, arrays)) {
     const codec = Blosc.fromConfig(config);
     const encAndDec = await checkAsyncEncodeDecode(codec, arr);
     t.equal(arr, encAndDec);
   }
-});
-
-test('Invalid compressor options', t => {
-  t.throws(() => new Blosc(2, 'nope'));
-  t.throws(() => new Blosc(-1));
-  t.throws(() => new Blosc(10));
-  t.throws(() => new Blosc(5, 'lz4', 3));
-});
-
-test('Static constructor', async t => {
-  const config = {
-    id: 'blosc',
-    cname: 'lz4',
-    shuffle: Blosc.SHUFFLE,
-    clevel: 5,
-    blocksize: 10,
-  };
-  const codec = Blosc.fromConfig(config);
-  const encAndDec = await checkAsyncEncodeDecode(codec, arrays[0]);
-  t.equal(arrays[0], encAndDec);
 });

@@ -10,6 +10,7 @@ const MAX_BUFFER_SIZE = 0x7e000000;
 
 /** @type {Promise<import('../codecs/lz4/lz4_codec.js').LZ4Module>} */
 let emscriptenModule;
+/** @returns {Promise<import('../codecs/lz4/lz4_codec.js').LZ4Module>} */
 const init = async () => {
   let wasmBinary;
   let url = new URL("../codecs/lz4/lz4_codec.wasm", import.meta.url);

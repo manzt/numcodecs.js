@@ -1,6 +1,6 @@
 import { test } from 'zora';
 
-import { Zstd } from '../dist/index.js';
+import { Zstd } from '../src/index.js';
 import { range, linspace, product, checkAsyncEncodeDecode } from './common.js';
 
 const codecConfigs = [
@@ -14,10 +14,10 @@ const codecConfigs = [
 ];
 
 const arrays = [
-  range(1000, '<u4'),
-  linspace(1000, 1001, 1000, '<f4'),
-  linspace(35, 4000, 20, '<u4'),
-  range(323332, '<i2'),
+  range(1000, 'uint32'),
+  linspace(1000, 1001, 1000, 'float32'),
+  linspace(35, 4000, 20, 'uint32'),
+  range(323332, 'int16'),
 ];
 
 test('Ensure all equal', async t => {
@@ -28,14 +28,8 @@ test('Ensure all equal', async t => {
   }
 });
 
-test('Invalid compressor options', t => {
-  t.throws(() => new LZ4(1.33));
-  t.throws(() => new LZ4(-2.3));
-});
-
 test('Static constructor', async t => {
-  const config = { id: 'zstd' };
-  const codec = Zstd.fromConfig(config);
+  const codec = Zstd.fromConfig({ id: "zstd" });
   const encAndDec = await checkAsyncEncodeDecode(codec, arrays[0]);
   t.equal(arrays[0], encAndDec);
 });
