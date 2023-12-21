@@ -9,12 +9,12 @@ await esbuild.build({
 		"src/lz4.ts",
 		"src/zstd.ts",
 	],
-	external: ["fflate"],
 	outdir: "dist",
 	loader: { ".wasm": "binary" },
 	bundle: true,
 	splitting: true,
 	format: "esm",
+  packages: "external"
 });
 
 fs.writeFile(

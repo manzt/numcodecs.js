@@ -1,14 +1,17 @@
 {
-  "include": ["src", "types", "codecs"],
   "compilerOptions": {
-    "module": "esnext",
+    "module": "nodenext",
+    "moduleResolution": "nodenext",
     "target": "esnext",
-    "moduleResolution": "node",
     "strict": true,
+    "allowJs": true,
+    "checkJs": true,
     "declaration": true,
     "skipLibCheck": true,
+    "outDir": "dist",
     "types": [
-      "@types/emscripten"
+      "@types/emscripten",
+      "@types/node"
     ]
   }
 }

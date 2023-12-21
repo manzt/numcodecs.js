@@ -1,36 +1,50 @@
-import moduleFactory, { LZ4Module } from '../codecs/lz4/lz4_codec';
-import wasmBinary from '../codecs/lz4/lz4_codec.wasm';
-import type { Codec, CodecConstructor } from './types';
+import moduleFactory from '../codecs/lz4/lz4_codec.js';
+
+/**
+ * @typedef Config
+ * @property {number} [acceleration]
+ */
 
 const DEFAULT_ACCELERATION = 1;
 const MAX_BUFFER_SIZE = 0x7e000000;
 
-let emscriptenModule: Promise<LZ4Module>;
-const init = () => moduleFactory({ noInitialRun: true, wasmBinary });
-
-interface LZ4Config {
-  acceleration?: number;
+/** @type {Promise<import('../codecs/lz4/lz4_codec.js').LZ4Module>} */
+let emscriptenModule;
+const init = async () => {
+  let wasmBinary;
+  let url = new URL("../codecs/lz4/lz4_codec.wasm", import.meta.url);
+  try {
+    // Browser and Deno
+    const response = await fetch(url);
+    wasmBinary = await response.arrayBuffer();
+  } catch (e) {
+    const fs = await import("node:fs/promises");
+    wasmBinary = (await fs.readFile(url)).buffer;
+  }
+  return moduleFactory({
+    noInitialRun: true,
+    wasmBinary,
+  })
 }
 
-const LZ4: CodecConstructor<LZ4Config> = class LZ4 implements Codec {
-  public static codecId = 'lz4';
-  public static DEFAULT_ACCELERATION = DEFAULT_ACCELERATION;
-  public static max_buffer_size = MAX_BUFFER_SIZE;
-  public max_buffer_size = MAX_BUFFER_SIZE;
-  public acceleration: number;
+export default class LZ4 {
+  static codecId = 'lz4';
+  static DEFAULT_ACCELERATION = DEFAULT_ACCELERATION;
+  static max_buffer_size = MAX_BUFFER_SIZE;
 
+  /** @param {number} acceleration */
   constructor(acceleration = DEFAULT_ACCELERATION) {
-    if (!Number.isInteger(acceleration)) {
-      throw Error(`Invalid acceleration "${acceleration}". Must be a positive integer.`);
-    }
+    /** @type {number} */
     this.acceleration = acceleration <= 0 ? DEFAULT_ACCELERATION : acceleration;
   }
 
-  static fromConfig({ acceleration }: LZ4Config): LZ4 {
+  /** @param {Config} config */
+  static fromConfig({ acceleration }) {
     return new LZ4(acceleration);
   }
 
-  async encode(data: Uint8Array): Promise<Uint8Array> {
+  /** @param {Uint8Array} data */
+  async encode(data) {
     if (!emscriptenModule) {
       emscriptenModule = init();
     }
@@ -46,25 +60,18 @@ const LZ4: CodecConstructor<LZ4Config> = class LZ4 implements Codec {
     return result;
   }
 
-  async decode(data: Uint8Array, out?: Uint8Array): Promise<Uint8Array> {
+  /** @param {Uint8Array} data */
+  async decode(data) {
     if (!emscriptenModule) {
       emscriptenModule = init();
     }
-
     if (data.length > MAX_BUFFER_SIZE) {
       throw Error(`Codec does not support buffers of > ${MAX_BUFFER_SIZE} bytes.`);
     }
-
     const module = await emscriptenModule;
     const view = module.decompress(data);
     const result = new Uint8Array(view); // Copy view and free wasm memory
     module.free_result();
-    if (out !== undefined) {
-      out.set(result);
-      return out;
-    }
     return result;
   }
 };
-
-export default LZ4;
