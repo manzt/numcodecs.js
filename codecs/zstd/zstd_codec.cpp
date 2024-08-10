@@ -42,7 +42,7 @@ val decompress(std::string source)
     };
 
     if (ZSTD_isError(status)) {
-        throw std::runtime_error("zstd codec error" + std::string(ZSTD_getErrorName(status)));
+        throw std::runtime_error("zstd codec error: " + std::string(ZSTD_getErrorName(status)));
     }
 
     // setup destination buffer
@@ -82,7 +82,7 @@ val decompress(std::string source)
             if (dest_ptr == output.dst)
                 dest_ptr = (char *) NULL;
             free(output.dst);
-            throw std::runtime_error("zstd codec error" + std::string(ZSTD_getErrorName(status)));
+            throw std::runtime_error("zstd codec error: " + std::string(ZSTD_getErrorName(status)));
         }
 
         // std::cerr << "Status: " << status << std::endl;

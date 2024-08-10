@@ -57,6 +57,7 @@ cd ../../../
     -s ENVIRONMENT="webview" \
     -s MALLOC=emmalloc \
     -s EXPORT_NAME="zstd_codec" \
+    -s EXPORT_EXCEPTION_HANDLING_HELPERS=1 \
     -x c++ \
     --std=c++17 \
     -lembind \
