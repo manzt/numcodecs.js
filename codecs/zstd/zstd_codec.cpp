@@ -39,6 +39,7 @@ val decompress(std::string source)
     };
 
     if (ZSTD_isError(status)) {
+        ZSTD_freeDStream(zds);
         throw std::runtime_error("zstd codec error: " + std::string(ZSTD_getErrorName(status)));
     }
 
@@ -55,9 +56,11 @@ val decompress(std::string source)
         if (dest_size < 1024*1024)
             dest_size = 1024*1024;
     } else if (dest_size == ZSTD_CONTENTSIZE_ERROR) {
+        ZSTD_freeDStream(zds);
         throw std::runtime_error("zstd codec error: content size error");
     } else if (dest_size < 0) {
         // unknown error
+        ZSTD_freeDStream(zds);
         throw std::runtime_error("zstd codec error: unknown ZSTD_getFrameContentSize error");
     }
 
@@ -65,6 +68,7 @@ val decompress(std::string source)
 
     if (output.dst == NULL) {
         // error, cannot allocate memory
+        ZSTD_freeDStream(zds);
         throw std::runtime_error("zstd codec error: cannot allocate output buffer");
     }
 
@@ -77,6 +81,7 @@ val decompress(std::string source)
         if (ZSTD_isError(status)) {
             if (dest_ptr == output.dst)
                 dest_ptr = (char *) NULL;
+            ZSTD_freeDStream(zds);
             free(output.dst);
             throw std::runtime_error("zstd codec error: " + std::string(ZSTD_getErrorName(status)));
         }
@@ -90,6 +95,7 @@ val decompress(std::string source)
 
             if (new_size < output.size || new_size < status) {
                 // overflow error
+                ZSTD_freeDStream(zds);
                 free(output.dst);
                 throw std::runtime_error("zstd codec error: output buffer overflow");
             }
@@ -99,6 +105,7 @@ val decompress(std::string source)
 
             if (new_dst == NULL) {
                 // free the original pointer if realloc fails.
+                ZSTD_freeDStream(zds);
                 free(output.dst);
                 throw std::runtime_error("zstd codec error: could not expand output buffer");
             }
@@ -109,6 +116,7 @@ val decompress(std::string source)
         }
     } while (status > 0);
 
+    ZSTD_freeDStream(zds);
     dest_ptr = (char *) output.dst;
 
     return val(typed_memory_view(output.pos, (uint8_t *)dest_ptr));
