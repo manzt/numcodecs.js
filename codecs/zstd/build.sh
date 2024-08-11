@@ -49,7 +49,7 @@ cd ../../../
     ${OPTIMIZE} \
     -I "$CODEC_DIR/lib" \
     --closure 1 \
-    -fwasm-exceptions
+    -fwasm-exceptions \
     -s ALLOW_MEMORY_GROWTH=1 \
     -s MODULARIZE=1 \
     -s EXPORT_ES6=1 \
