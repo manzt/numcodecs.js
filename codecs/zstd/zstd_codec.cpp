@@ -117,6 +117,12 @@ val decompress(std::string source)
     } while (status > 0);
 
     ZSTD_freeDStream(zds);
+
+    if (input.pos < input.size) {
+        free(output.dst);
+        throw std::runtime_error("zstd codec error: unprocessed input suggests more than one input frame");
+    }
+
     dest_ptr = (char *) output.dst;
 
     return val(typed_memory_view(output.pos, (uint8_t *)dest_ptr));

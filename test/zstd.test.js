@@ -66,4 +66,14 @@ test('Streaming decompression', async t => {
   const dec2 = await codec.decode(bytes2);
   const str2 = Buffer.from(dec2).toString();
   t.equal(str2, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz'.repeat(1024 * 32));
+
+  //two frames given as input
+  const bytes3 = new Uint8Array([
+    40, 181, 47, 253, 0, 88, 97, 0, 0, 72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 33,
+    40, 181, 47, 253, 0, 88, 97, 0, 0, 72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 33,
+  ]);
+  codec.decode(bytes3).then(
+      (result) => { t.fail() },
+      (error) => { t.ok(true) }
+  );
 });
