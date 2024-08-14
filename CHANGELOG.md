@@ -1,5 +1,11 @@
 # numcodecs
 
+## 0.3.2
+
+### Patch Changes
+
+- feat: Support Zstandard streaming decompression ([`8082fdd`](https://github.com/manzt/numcodecs.js/commit/8082fdd21ab081084f427ad4827b33390ab13f08))
+
 ## 0.3.1
 
 ### Patch Changes
