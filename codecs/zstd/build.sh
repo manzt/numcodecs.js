@@ -49,7 +49,7 @@ cd ../../../
     ${OPTIMIZE} \
     -I "$CODEC_DIR/lib" \
     --closure 1 \
-    --bind \
+    -fwasm-exceptions \
     -s ALLOW_MEMORY_GROWTH=1 \
     -s MODULARIZE=1 \
     -s EXPORT_ES6=1 \
@@ -57,8 +57,10 @@ cd ../../../
     -s ENVIRONMENT="webview" \
     -s MALLOC=emmalloc \
     -s EXPORT_NAME="zstd_codec" \
+    -s EXPORT_EXCEPTION_HANDLING_HELPERS=1 \
     -x c++ \
     --std=c++17 \
+    -lembind \
     -lzstd \
     -L "$BUILD_DIR/lib" \
     -o "zstd_codec.js"

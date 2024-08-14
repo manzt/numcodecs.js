@@ -21,3 +21,6 @@ dist/
 
 # ignore codec builds
 codecs/**/build/
+# pixi environments
+.pixi
+*.egg-info
