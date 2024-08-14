@@ -57,7 +57,7 @@ val decompress(std::string source)
         // guess decompressed buffer size based on source size
         dest_size = source_size*2;
 
-        // Initialize the destination size to 1 MiB at minimum
+        // Initialize the destination size to DEST_GROWTH_SIZE (default: 128 KiB) at minimum
         if (dest_size < DEST_GROWTH_SIZE)
             dest_size = DEST_GROWTH_SIZE;
 
