@@ -41,10 +41,11 @@ test('Static constructor', async t => {
 });
 
 test('Streaming decompression', async t => {
+  // Test input frames with unknown frame content size
   const config = { id: 'zstd' };
   const codec = Zstd.fromConfig(config);
 
-  // We encode bytes directly that were the result of streaming compression
+  // Encode bytes directly that were the result of streaming compression
   const bytes = new Uint8Array([
     40, 181, 47, 253, 0, 88, 97, 0, 0, 72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 33,
   ]);
@@ -52,7 +53,16 @@ test('Streaming decompression', async t => {
   const str = Buffer.from(dec).toString();
   t.equal(str, 'Hello World!');
 
-  const bytes2 = new Uint8Array([
+  // Two consecutive frames given as input
+  const bytes2 = new Uint8Array(bytes.length * 2);
+  bytes2.set(bytes, 0);
+  bytes2.set(bytes, bytes.length);
+  const dec2 = await codec.decode(bytes2);
+  const str2 = Buffer.from(dec2).toString();
+  t.equal(str2, 'Hello World!Hello World!');
+
+  // Single long frame that decompresses to a large output
+  const bytes3 = new Uint8Array([
     40, 181, 47, 253, 0, 88, 36, 2, 0, 164, 3, 65, 66, 67, 68, 69, 70, 71, 72, 73, 74, 75, 76, 77, 78, 79, 80, 81, 82,
     83, 84, 85, 86, 87, 88, 89, 90, 91, 92, 93, 94, 95, 96, 97, 98, 99, 100, 101, 102, 103, 104, 105, 106, 107, 108,
     109, 110, 111, 112, 113, 114, 115, 116, 117, 118, 119, 120, 121, 122, 1, 0, 58, 252, 223, 115, 5, 5, 76, 0, 0, 8,
@@ -63,21 +73,18 @@ test('Streaming decompression', async t => {
     255, 57, 16, 2, 76, 0, 0, 8, 85, 1, 0, 252, 255, 57, 16, 2, 76, 0, 0, 8, 77, 1, 0, 252, 255, 57, 16, 2, 77, 0, 0, 8,
     69, 1, 0, 252, 127, 29, 8, 1,
   ]);
-  const dec2 = await codec.decode(bytes2);
-  const str2 = Buffer.from(dec2).toString();
-  t.equal(str2, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz'.repeat(1024 * 32));
+  const dec3 = await codec.decode(bytes3);
+  const str3 = Buffer.from(dec3).toString();
+  t.equal(str3, 'ABCDEFGHIJKLMNOPQRSTUVWXYZ[\\]^_`abcdefghijklmnopqrstuvwxyz'.repeat(1024 * 32));
 
-  //two frames given as input
-  const bytes3 = new Uint8Array([
-    40, 181, 47, 253, 0, 88, 97, 0, 0, 72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 33, 40, 181, 47, 253, 0, 88,
-    97, 0, 0, 72, 101, 108, 108, 111, 32, 87, 111, 114, 108, 100, 33,
-  ]);
-  codec.decode(bytes3).then(
+  // Garbage input results in an error
+  const bytes4 = new Uint8Array([0, 0, 0, 0, 0, 0, 0, 0]);
+  codec.decode(bytes4).then(
     result => {
       t.fail();
     },
     error => {
-      t.ok(true);
+      t.ok(error.message.match('zstd codec error: content size error'));
     }
   );
 });

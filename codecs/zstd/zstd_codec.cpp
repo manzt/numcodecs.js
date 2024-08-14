@@ -20,12 +20,22 @@ val compress(std::string source, int level)
 
 val decompress(std::string source)
 {
+    // number of bytes to grow the output buffer if more space is needed
+    const size_t DEST_GROWTH_SIZE = ZSTD_DStreamOutSize();
+
     // setup source buffer
     const char *source_ptr = source.c_str();
     int source_size = source.size();
 
-    ZSTD_DStream * zds = ZSTD_createDStream();
+    // create and initialize decompression stream / context
+    // use the streaming API so that we can handle unkown frame content size
+    ZSTD_DStream *zds = ZSTD_createDStream();
+
     size_t status = ZSTD_initDStream(zds);
+    if (ZSTD_isError(status)) {
+        ZSTD_freeDStream(zds);
+        throw std::runtime_error("zstd codec error: " + std::string(ZSTD_getErrorName(status)));
+    }
 
     ZSTD_inBuffer input = {
         .src = (void*) source.c_str(),
@@ -38,11 +48,6 @@ val decompress(std::string source)
         .pos = 0,
     };
 
-    if (ZSTD_isError(status)) {
-        ZSTD_freeDStream(zds);
-        throw std::runtime_error("zstd codec error: " + std::string(ZSTD_getErrorName(status)));
-    }
-
     // setup destination buffer
     unsigned long long dest_size = ZSTD_getFrameContentSize(source_ptr, source_size);
 
@@ -53,8 +58,9 @@ val decompress(std::string source)
         dest_size = source_size*2;
 
         // Initialize the destination size to 1 MiB at minimum
-        if (dest_size < 1024*1024)
-            dest_size = 1024*1024;
+        if (dest_size < DEST_GROWTH_SIZE)
+            dest_size = DEST_GROWTH_SIZE;
+
     } else if (dest_size == ZSTD_CONTENTSIZE_ERROR) {
         ZSTD_freeDStream(zds);
         throw std::runtime_error("zstd codec error: content size error");
@@ -64,6 +70,7 @@ val decompress(std::string source)
         throw std::runtime_error("zstd codec error: unknown ZSTD_getFrameContentSize error");
     }
 
+    // the output buffer will either be assigned to dest_ptr to be freed by free_result, or freed on error
     output.dst = malloc((size_t) dest_size);
 
     if (output.dst == NULL) {
@@ -87,13 +94,10 @@ val decompress(std::string source)
         }
 
         if (status > 0 && output.pos == output.size ) {
-            // attempt to expand output buffer in 1 MiB (or more) increments
-            if (status < 1024*1024) {
-                status = (size_t) 1024*1024;
-            }
-            size_t new_size = output.size + status;
+            // attempt to expand output buffer in DEST_GROWTH_SIZE increments
+            size_t new_size = output.size + DEST_GROWTH_SIZE;
 
-            if (new_size < output.size || new_size < status) {
+            if (new_size < output.size || new_size < DEST_GROWTH_SIZE) {
                 // overflow error
                 ZSTD_freeDStream(zds);
                 free(output.dst);
@@ -114,14 +118,12 @@ val decompress(std::string source)
 
             output.size = new_size;
         }
-    } while (status > 0);
+        
+    // status > 0 indicates there are additional bytes to process in this frame
+    // status == 0 and input.pos < input.size suggests there may be an additional frame
+    } while (status > 0 || input.pos < input.size);
 
     ZSTD_freeDStream(zds);
-
-    if (input.pos < input.size) {
-        free(output.dst);
-        throw std::runtime_error("zstd codec error: unprocessed input suggests more than one input frame");
-    }
 
     dest_ptr = (char *) output.dst;
 
