@@ -61,7 +61,7 @@
     "@changesets/cli": "^2.26.2",
     "@svitejs/changesets-changelog-github-compact": "^1.1.0",
     "@types/emscripten": "^1.39.7",
-    "esbuild": "^0.19.2",
+    "esbuild": "^0.25.0",
     "prettier": "^3.0.1",
     "tap-set-exit": "^1.1.1",
     "typescript": "^5.1.6",
